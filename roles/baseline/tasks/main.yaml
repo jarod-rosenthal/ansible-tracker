@@ -10,7 +10,7 @@
   apt:
     name: "{{ item }}"
   loop:
-	- docker.io
+    - docker.io
     - python-pip
     - avahi-daemon
     - git
@@ -50,7 +50,7 @@
   lineinfile:
     path: /etc/sudoers
     state: present
-	line: "skyhub ALL=(ALL) NOPASSWD:/skyhub/skyhub"
+    line: "skyhub ALL=(ALL) NOPASSWD:/skyhub/skyhub"
 
 - name: Create directories for Tracker
   file:
