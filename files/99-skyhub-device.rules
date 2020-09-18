@@ -1,0 +1,6 @@
+# Witmotion HWT901B
+ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="7523", KERNEL=="ttyUSB*", SYMLINK+="hwt901b" MODE="0777"
+
+# Prolific Technology, Inc. PL2303 Serial Port
+ATTRS{idVendor}=="067b", ATTRS{idProduct}=="2303", KERNEL=="ttyUSB*", SYMLINK+="ttyACM0" MODE="0777"
+

@@ -21,17 +21,6 @@
     - nvidia-container-csv-visionworks
     - deepstream-5.0
 
-- name: Enable services
-  service:
-    name: "{{ item }}"
-    state: started
-    enabled: true
-  become: true
-  loop:
-    - avahi-daemon
-    - ssh
-    - docker
-
 - pip:
     name: jetson-stats
 
@@ -64,3 +53,68 @@
     - /skyhub/storage
     - /skyhub/storage/mysql
     - /skyhub/storage/certs
+
+- name: Cloning get-started repository
+  git:
+    repo: https://gitlab.com/skyhuborg/get-started.git
+    dest: ~/get-started
+    update: yes
+
+- name: Copying Sky Hub CLI
+  copy:
+    src: ~/get-started/deploy/
+    dest: /skyhub
+
+- name: Configuring udev rules
+  copy:
+    src: "{{ item }}"
+    dest: /etc/udev/rules.d/
+  loop:
+    - ./files/99-skyhub-device.rules
+
+- name: Reloading udev rules
+  shell:
+    cmd: udevadm control --reload-rules && udevadm trigger
+
+- name: Installing service definitions
+  copy:
+    src: "{{ item }}"
+    dest: /etc/systemd/system/
+    mode: 644
+  loop:
+    - ./files/skyhub-pipe.service
+    - ./files/skyhub-clocks.service
+
+- name: Installing clock service
+  copy:
+    src: "{{ item }}"
+    dest: /skyhub/
+    mode: u+rwx
+  loop:
+    - ./files/clock.sh
+    - ./files/skyhub-pipe
+
+- name: Installing Sky Hub pipe
+  copy:
+    src: "{{ item }}"
+    dest: /skyhub/
+    mode: 666
+  loop:
+    - ./files/skyhub-pipe
+
+- name: Reloading systemctl daemon
+  systemd:
+    daemon_reload: yes
+
+- name: Enable services
+  service:
+    name: "{{ item }}"
+    state: started
+    enabled: true
+  become: true
+  loop:
+    - avahi-daemon
+    - ssh
+    - docker
+    - skyhub-pipe
+    - skyhub-clocks

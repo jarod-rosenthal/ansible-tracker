@@ -1,0 +1,40 @@
+#!/bin/bash -p
+
+pipe="/skyhub/skyhub.pipe"
+
+trap "rm -f $pipe" EXIT
+
+if [ ! -p $pipe ]; then
+  echo 'Creating pipe'
+  mkfifo $pipe
+fi
+
+while true
+do
+    if read line <$pipe; then
+        echo "PIPE COMMAND: $line"
+        if [ $line == "RESTART-TRACKER" ]; then
+          skyhub restart
+	    fi
+        if [ $line == "STOP-TRACKER" ]; then
+          skyhub stop
+        fi
+        if [ $line == "START-TRACKER" ]; then
+          skyhub start
+        fi
+        if [ $line == "REBOOT" ]; then
+            reboot
+            fi
+        if [ $line == "UPDATE" ]; then
+          skyhub update
+        fi
+        if [ $line == "RESTART-ALL" ]; then
+          skyhub restart
+        fi
+        if [ $line == "UPDATE-HOST" ]; then
+            apt-get -y update
+            apt-get -y upgrade
+        fi
+    fi
+done
+

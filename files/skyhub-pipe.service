@@ -1,0 +1,10 @@
+[Unit]
+Description=Sky Hub command named pipe
+
+[Service]
+Type=simple
+ExecStart=/bin/bash /bin/skyhub-pipe
+
+[Install]
+WantedBy=multi-user.target
+

@@ -1,0 +1,10 @@
+[Unit]
+Description=Maximize Jetson Performance
+After=multi-user.target
+
+[Service]
+ExecStart=/bin/sh /skyhub/clock.sh
+
+[Install]
+WantedBy=multi-user.target
+
