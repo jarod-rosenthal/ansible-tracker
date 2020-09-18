@@ -92,7 +92,6 @@
     mode: u+rwx
   loop:
     - ./files/clock.sh
-    - ./files/skyhub-pipe
 
 - name: Installing Sky Hub pipe
   copy:
