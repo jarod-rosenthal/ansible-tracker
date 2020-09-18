@@ -1,0 +1,66 @@
+- hostname:
+    name: skyhub-tracker
+
+- name: Upgrade packages
+  apt:
+    upgrade: dist
+    update_cache: yes
+
+- name: Install packages
+  apt:
+    name: "{{ item }}"
+  loop:
+	- docker.io
+    - python-pip
+    - avahi-daemon
+    - git
+    - docker-compose
+    - nvidia-container-csv-cuda
+    - nvidia-container-csv-cudnn 
+    - nvidia-container-csv-tensorrt
+    - nvidia-container-csv-visionworks
+    - deepstream-5.0
+
+- name: Enable services
+  service:
+    name: "{{ item }}"
+    state: started
+    enabled: true
+  become: true
+  loop:
+    - avahi-daemon
+    - ssh
+    - docker
+
+- pip:
+    name: jetson-stats
+
+- name: Creating Sky Hub User
+  user:
+    name: skyhub
+    generate_ssh_key: yes
+    ssh_key_bits: 2048
+    ssh_key_file: .ssh/id_rsa
+    shell: /bin/bash
+    password: skyhub123
+    groups: docker
+
+
+- name: Adding Sky Hub user to sudoers
+  lineinfile:
+    path: /etc/sudoers
+    state: present
+	line: "skyhub ALL=(ALL) NOPASSWD:/skyhub/skyhub"
+
+- name: Create directories for Tracker
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: skyhub
+    group: skyhub
+    mode: 0755
+  loop:
+    - /skyhub
+    - /skyhub/storage
+    - /skyhub/storage/mysql
+    - /skyhub/storage/certs
