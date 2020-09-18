@@ -118,3 +118,24 @@
     - docker
     - skyhub-pipe
     - skyhub-clocks
+
+
+#- name: Generate Sky Hub certificates
+#  shell: |
+#    openssl genrsa -out /skyhub/storage/certs/ca.key 4096
+#    openssl req -new -x509 -key /skyhub/storage/certs/ca.key -sha256 -batch -config ./files/openssl.cnf -days 1825 -out /skyhub/storage/certs/ca.cert
+#    openssl genrsa -out /skyhub/storage/certs/service.key 4096
+#    openssl req -new -key /skyhub/storage/certs/service.key -batch -config ./files/openssl.cnf -out /skyhub/storage/certs/service.csr 
+#    openssl x509 -req -in /skyhub/storage/certs/service.csr -CA /skyhub/storage/certs/ca.cert -CAkey /skyhub/storage/certs/ca.key -CAcreateserial -out /skyhub/storage/certs/service.pem -days 1825 -sha256 -extfile ./files/openssl.cnf -extensions v3_ca
+#    exit 0a
+#  args:
+#    executable: /bin/bash
+
+
+- name: Blacklist kernel modules
+  kernel_blacklist:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - bluedroid_pm
+
