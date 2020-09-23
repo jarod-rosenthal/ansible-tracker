@@ -8,11 +8,11 @@
 #    autoremove: yes
 #    autoclean: yes
 
-- name: Remove packages
-  apt:
-    name: "{{ item }}"
-  loop:
-    - systemd-timesyncd
+# - name: Remove packages
+#  apt:
+#    name: "{{ item }}"
+#  loop:
+#    - systemd-timesyncd
 
 - name: Install packages
   apt:
@@ -36,7 +36,7 @@
 
 - name: Adding Sky Hub user to sudoers
   lineinfile:
-    path: /etc/sudoers
+    path: /etc/chrony/chrony.conf
     state: present
     line: "{{ item }}"
   loop:
