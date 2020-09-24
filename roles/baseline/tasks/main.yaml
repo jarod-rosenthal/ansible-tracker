@@ -159,7 +159,7 @@
   lineinfile:
     path: /etc/sudoers
     state: present
-    line: "skyhub ALL=(ALL) NOPASSWD:/skyhub/skyhub"
+    line: "skyhub ALL=(ALL) NOPASSWD:/bin/skyhub"
 
 - name: Create directories for Tracker
   file:
@@ -300,6 +300,11 @@
   file:
     path: ./install
     state: absent
+
+- name: Cleanup old skyhub CLI
+  file:
+    path: /skyhub/skyhub
+    state: absent    
 
 - name: Cleanup ansible git repo
   file:
