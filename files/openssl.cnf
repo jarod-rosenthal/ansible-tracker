@@ -25,6 +25,6 @@ subjectKeyIdentifier   = hash
 authorityKeyIdentifier = keyid:always,issuer:always
 basicConstraints       = CA:TRUE
 keyUsage               = digitalSignature, nonRepudiation, keyEncipherment, dataEncipherment, keyAgreement, keyCertSign
-subjectAltName         = DNS:localhost, DNS:${HOSTNAME}, DNS: ${HOSTNAME}.local, DNS: 127.0.0.1, email:team@skyhub.org
+subjectAltName         = DNS:localhost, DNS:skyhub-tracker, DNS: skyhub-tracker.local, DNS: 127.0.0.1, email:team@skyhub.org
 issuerAltName          = issuer:copy
 
