@@ -19,6 +19,31 @@
     msg: Sky Hub cannot be installed without a storage disk.
   when: disk_confirmation.user_input != "y"
 
+- name: Install jmespath python package
+  pip:
+    name: jmespath
+
+- name: Create list of mounted devices
+  set_fact:
+    mounted_devices: "{{ ansible_mounts|json_query('[].device') }}"
+
+- name: Get mounted path for {{ storage_disk }}
+  set_fact:
+    storage_mount: "{{ item.mount }}"
+  with_items: "{{ ansible_mounts }}"
+  when: item.device == storage_disk
+
+- name: Stop service docker, if started
+  service:
+    name: docker
+    state: stopped
+
+- name: Unmount {{ storage_disk }} from {{ storage_mount }}
+  ansible.posix.mount:
+    path: '{{ storage_mount }}'
+    state: unmounted
+  when: storage_disk in mounted_devices    
+
 #- name: Unmounting storage device
 #shell: "umount {{ storage_disk }}"
 
@@ -134,7 +159,7 @@
   loop:
     - /skyhub
     - /skyhub/storage
-    - /skyhub/storage/mysql
+    - /skyhub/storage/mariadb
     - /skyhub/storage/certs
     - /skyhub/storage/docker
 
