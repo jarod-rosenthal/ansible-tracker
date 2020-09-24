@@ -1,11 +1,20 @@
 - hostname:
     name: skyhub-tracker
 
+
+- name: Discover existing Sky Hub Storage
+  set_fact:
+    storage_configured: true
+  when: 
+    - '"SKYHUB_STORAGE" in item.value.links.labels'
+  with_dict: "{{ ansible_devices }}"
+
 - name: Print disk result
   set_fact:
     storage_disk: "/dev/{{item.key}}"
   when:
    - item.key is search ("sd") or item.key is search("nvme")
+   - storage_configured != true
   with_dict: "{{ ansible_devices }}"
 
 - name: Install jmespath python package
@@ -17,35 +26,42 @@
     prompt: "Setup storage disk {{ storage_disk }}. WARNING: The disk will be formatted, would you like to continue? y/n"
     echo: yes
   register: disk_confirmation
+  when: storage_configured != true
 
 - name: Storage configuration accepted
   block:
   - name: Create list of mounted devices
     set_fact:
       mounted_devices: "{{ ansible_mounts|json_query('[].device') }}"
+
   - name: Get mounted path for {{ storage_disk }}
     set_fact:
       storage_mount: "{{ item.mount }}"
     with_items: "{{ ansible_mounts }}"
     when: item.device == storage_disk
+
   - name: Stop service docker, if started
     service:
       name: docker
       state: stopped
+
   - name: Unmount {{ storage_disk }} from {{ storage_mount }}
     ansible.posix.mount:
       path: '{{ storage_mount }}'
       state: unmounted
     when: storage_disk in mounted_devices    
+
   - name: Loading attached storage device information
     community.general.parted: device={{ storage_disk }} unit=MiB
     register: storage_info
+
   - name: Remove all partitions from disk
     community.general.parted:
       device: '{{ storage_disk }}'
       number: '{{ item.num }}'
       state: absent
     loop: '{{ storage_info.partitions }}'
+
   - name: Setting up Sky Hub Storage Device
     community.general.parted:
       device: '{{ storage_disk }}'
@@ -53,18 +69,22 @@
       state: present
       fs_type: ext4
       label: gpt
+
   - name: Formatting Sky Hub Storage Filesystem
     community.general.filesystem:
       fstype: ext4
       dev: '{{ storage_disk }}'
       opts: -L SKYHUB_STORAGE
+      
   - name: Mounting Sky Hub Storage device
     ansible.posix.mount:
       path: /skyhub/storage
       src: LABEL=SKYHUB_STORAGE
       fstype: ext4
       state: mounted
-  when: disk_confirmation.user_input != "y"
+  when: 
+    - storage_configured != true
+    - disk_confirmation.user_input != "y"
 
 #- name: Upgrade packages
 #  apt:
@@ -81,29 +101,28 @@
 
 - name: Install packages
   apt:
-    name: "{{ item }}"
     autoremove: yes
     autoclean: yes
     update_cache: yes
-  with_items:
-    - docker.io=19.03.6-0ubuntu1~18.04.1
-    - python-pip=9.0.1-2.3~ubuntu1.18.04.2
-    - avahi-daemon=0.7-3.1ubuntu1.2
-    - git=1:2.17.1-1ubuntu0.7
-    - nvidia-container-csv-cuda=10.2.89-1
-    - nvidia-container-csv-cudnn=8.0.0.180-1+cuda10.2
-    - nvidia-container-csv-tensorrt=7.1.3.0-1+cuda10.2
-    - nvidia-container-csv-visionworks=1.6.0.501
-    - deepstream-5.0=5.0.0-1
-    - gpsd
-    - gpsd-clients
-    - chrony
+    pkg:
+      - docker.io=19.03.6-0ubuntu1~18.04.1
+      - python-pip=9.0.1-2.3~ubuntu1.18.04.2
+      - avahi-daemon=0.7-3.1ubuntu1.2
+      - git=1:2.17.1-1ubuntu0.7
+      - nvidia-container-csv-cuda=10.2.89-1
+      - nvidia-container-csv-cudnn=8.0.0.180-1+cuda10.2
+      - nvidia-container-csv-tensorrt=7.1.3.0-1+cuda10.2
+      - nvidia-container-csv-visionworks=1.6.0.501
+      - deepstream-5.0=5.0.0-1
+      - gpsd
+      - gpsd-clients
+      - chrony
 
 - name: Setting up GPSD Service
   lineinfile:
     path: /etc/hosts
     regexp: '^GPSD_OPTIONS=""'
-    line: GPSD_OPTIONS="-n -G ${*}"
+    line: GPSD_OPTIONS="-n -G"
     owner: root
     group: root
     mode: '0644'
@@ -129,6 +148,7 @@
     shell: /bin/bash
     password: "{{ 'skyhub123' | password_hash('sha512') }}"
     groups: docker
+    update_password: on_create
 
 - name: Adding Sky Hub user to sudoers
   lineinfile:
@@ -205,6 +225,20 @@
   loop:
     - ./files/etc/docker/daemon.json
   
+- name: Disable services
+  systemd:
+    name: "{{ item }}"
+    state: stopped
+    enabled: no
+  become: true
+  loop: 
+    - apport
+    - kerneloops
+    - ModemManager
+    - snapd
+    - whoopsie
+    - wpa_supplicant
+
 - name: Enable services
   systemd:
     name: "{{ item }}"
