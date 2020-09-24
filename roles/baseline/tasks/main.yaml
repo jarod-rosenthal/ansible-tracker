@@ -1,7 +1,6 @@
 - hostname:
     name: skyhub-tracker
 
-
 - name: Discover existing Sky Hub Storage
   set_fact:
     storage_configured: true
