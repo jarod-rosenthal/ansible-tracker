@@ -136,7 +136,7 @@
     - /skyhub/storage
     - /skyhub/storage/mysql
     - /skyhub/storage/certs
-    - /skyhub/docker
+    - /skyhub/storage/docker
 
 - name: Cloning get-started repository
   git:
