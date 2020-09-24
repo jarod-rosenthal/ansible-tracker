@@ -89,7 +89,7 @@
       fstype: ext4
       state: mounted
   when: 
-    - storage_configured != true && disk_confirmation.user_input != "y"
+    - storage_configured != true and disk_confirmation.user_input != "y"
 
 #- name: Upgrade packages
 #  apt:
