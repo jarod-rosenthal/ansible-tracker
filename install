@@ -1,9 +1,10 @@
 #!/bin/bash
 
-apt install -y git ansible
+apt-get -qq update 
+apt install -qq -y git ansible
 
 if [ ! -d ansible-tracker ]; then
-	git clone https://gitlab.com/skyhuborg/ansible-tracker.git
+	git -q clone https://gitlab.com/skyhuborg/ansible-tracker.git
 else
 	pushd ansible-tracker
 	git pull
