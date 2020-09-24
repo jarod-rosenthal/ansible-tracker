@@ -293,3 +293,12 @@
   loop:
     - bluedroid_pm
 
+- name: Cleanup installer
+  file:
+    path: ./install
+    state: absent
+
+- name: Cleanup ansible git repo
+  file:
+    path: ./ansible-tracker
+    state: absent    

@@ -10,14 +10,14 @@ pip -q install ansible
 ansible-galaxy collection install ansible.posix -p ~/.ansible/collections
 ansible-galaxy collection install community.general -p ~/.ansible/collections
 
-if [ ! -d ansible-tracker ]; then
-	git clone -q https://gitlab.com/skyhuborg/ansible-tracker.git
-else
-	cd ansible-tracker
-	git pull -q
-	cd ..	
+if [ -d ansible-tracker ]; then
+	rm -rf ./ansible-tracker
 fi
+
+git clone -q https://gitlab.com/skyhuborg/ansible-tracker.git
 
 cd ansible-tracker
 
 ansible-playbook jetson.yaml
+#this is for when we go to production
+#ANSIBLE_STDOUT_CALLBACK=actionable sudo -E ansible-playbook jetson.yaml
