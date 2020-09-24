@@ -1,6 +1,51 @@
 - hostname:
     name: skyhub-tracker
 
+- name: Print disk result
+  set_fact:
+    storage_disk: "/dev/{{item.key}}"
+  when:
+   - item.key is search ("sd") or item.key is search("nvme")
+  with_dict: "{{ ansible_devices }}"
+
+- name: Storage disk initialization confirmation
+  pause:
+    prompt: "Installer will format {{ storage_disk }}. Would you like to continue? y/n"
+    echo: yes
+  register: disk_confirmation
+
+- name: test
+  fail: 
+    msg: Sky Hub cannot be installed without a storage disk.
+  when: disk_confirmation != "y"
+
+- name: Loading attached storage device information
+  community.general.parted: device={{ storage_disk }} unit=MiB
+  register: storage_info
+
+- name: Remove all partitions from disk
+  community.general.parted:
+    device: '{{ storage_disk }}'
+    number: '{{ item.num }}'
+    state: absent
+  loop: '{{ storage_info.partitions }}'
+
+- name: Setting up Sky Hub Storage Device
+  community.general.parted:
+    device: '{{ storage_disk }}'
+    number: 1
+    state: present
+    fs_type: ext4
+    label: SKYHUB_STORAGE
+
+- name: Mounting Sky Hub Storage device
+  ansible.posix.mount:
+    path: /skyhub/storage
+    src: LABEL=SKYHUB_STORAGE
+    fstype: ext4
+    state: present
+
+
 #- name: Upgrade packages
 #  apt:
 #    upgrade: dist

@@ -3,7 +3,12 @@
 echo "Setting up Sky Hub Installer..."
 
 apt-get -qq update 
-apt-get install -qq -y git ansible
+apt-get install -qq -y git
+
+pip -q install ansible
+
+ansible-galaxy collection install ansible.posix -p ~/.ansible/collections
+ansible-galaxy collection install community.general -p ~/.ansible/collections
 
 if [ ! -d ansible-tracker ]; then
 	git clone -q https://gitlab.com/skyhuborg/ansible-tracker.git
