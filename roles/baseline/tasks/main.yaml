@@ -214,7 +214,7 @@
 - name: Installing Sky Hub pipe
   copy:
     src: "{{ item }}"
-    dest: /skyhub/
+    dest: /bin/
     mode: 666
   loop:
     - ./files/skyhub/skyhub-pipe
