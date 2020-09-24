@@ -83,6 +83,15 @@
     - gpsd-clients
     - chrony
 
+- name: Setting up GPSD Service
+  lineinfile:
+    path: /etc/hosts
+    regexp: '^GPSD_OPTIONS=""'
+    line: GPSD_OPTIONS="-n -G ${*}"
+    owner: root
+    group: root
+    mode: '0644'
+
 - name: Sync system time with GPS Receiver
   lineinfile:
     path: /etc/chrony/chrony.conf
@@ -193,6 +202,7 @@
   become: true
   loop:
     - gpsd
+    - chrony
     - avahi-daemon
     - ssh
     - docker
