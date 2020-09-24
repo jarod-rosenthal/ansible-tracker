@@ -1,7 +1,9 @@
 #!/bin/bash
 
+echo "Setting up Sky Hub Installer..."
+
 apt-get -qq update 
-apt install -qq -y git ansible
+apt-get install -qq -y git ansible
 
 if [ ! -d ansible-tracker ]; then
 	git -q clone https://gitlab.com/skyhuborg/ansible-tracker.git
