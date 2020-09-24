@@ -122,7 +122,7 @@
 
 - name: Setting up GPSD Service
   lineinfile:
-    path: /etc/hosts
+    path: /etc/default/gpsd
     regexp: '^GPSD_OPTIONS=""'
     line: GPSD_OPTIONS="-n -G"
     owner: root
