@@ -7,7 +7,7 @@
 - name: Initialized storage_configured variable
   set_fact:
     storage_configured: false
-    
+
 - name: Discover existing Sky Hub Storage
   set_fact:
     storage_configured: true
@@ -89,8 +89,7 @@
       fstype: ext4
       state: mounted
   when: 
-    - storage_configured != true
-    - disk_confirmation.user_input != "y"
+    - storage_configured != true && disk_confirmation.user_input != "y"
 
 #- name: Upgrade packages
 #  apt:
