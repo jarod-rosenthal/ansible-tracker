@@ -17,7 +17,10 @@
 - name: test
   fail: 
     msg: Sky Hub cannot be installed without a storage disk.
-  when: disk_confirmation != "y"
+  when: disk_confirmation.user_input != "y"
+
+#- name: Unmounting storage device
+#shell: "umount {{ storage_disk }}"
 
 - name: Loading attached storage device information
   community.general.parted: device={{ storage_disk }} unit=MiB
@@ -36,7 +39,8 @@
     number: 1
     state: present
     fs_type: ext4
-    label: SKYHUB_STORAGE
+    label: gpt
+    name: SKYHUB_STORAGE
 
 - name: Mounting Sky Hub Storage device
   ansible.posix.mount:
