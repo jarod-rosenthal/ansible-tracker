@@ -141,6 +141,7 @@
     shell: /bin/bash
     password: "{{ 'skyhub123' | password_hash('sha512') }}"
     groups: docker
+    update_password: on_create
 
 - name: Adding Sky Hub user to sudoers
   lineinfile:
