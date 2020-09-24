@@ -113,7 +113,7 @@
     dest: /skyhub/
     mode: u+rwx
   loop:
-    - ./files/clock.sh
+    - ./files/skyhub/clock.sh
 
 - name: Installing Sky Hub pipe
   copy:
