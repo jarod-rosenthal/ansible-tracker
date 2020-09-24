@@ -94,23 +94,22 @@
 
 - name: Install packages
   apt:
-    name: "{{ item }}"
     autoremove: yes
     autoclean: yes
     update_cache: yes
-  with_items:
-    - docker.io=19.03.6-0ubuntu1~18.04.1
-    - python-pip=9.0.1-2.3~ubuntu1.18.04.2
-    - avahi-daemon=0.7-3.1ubuntu1.2
-    - git=1:2.17.1-1ubuntu0.7
-    - nvidia-container-csv-cuda=10.2.89-1
-    - nvidia-container-csv-cudnn=8.0.0.180-1+cuda10.2
-    - nvidia-container-csv-tensorrt=7.1.3.0-1+cuda10.2
-    - nvidia-container-csv-visionworks=1.6.0.501
-    - deepstream-5.0=5.0.0-1
-    - gpsd
-    - gpsd-clients
-    - chrony
+    pkg:
+      - docker.io=19.03.6-0ubuntu1~18.04.1
+      - python-pip=9.0.1-2.3~ubuntu1.18.04.2
+      - avahi-daemon=0.7-3.1ubuntu1.2
+      - git=1:2.17.1-1ubuntu0.7
+      - nvidia-container-csv-cuda=10.2.89-1
+      - nvidia-container-csv-cudnn=8.0.0.180-1+cuda10.2
+      - nvidia-container-csv-tensorrt=7.1.3.0-1+cuda10.2
+      - nvidia-container-csv-visionworks=1.6.0.501
+      - deepstream-5.0=5.0.0-1
+      - gpsd
+      - gpsd-clients
+      - chrony
 
 - name: Setting up GPSD Service
   lineinfile:
@@ -218,6 +217,20 @@
   loop:
     - ./files/etc/docker/daemon.json
   
+- name: Disable services
+  systemd:
+    name: "{{ item }}"
+    state: stopped
+    enabled: no
+  become: true
+  loop: 
+    - apport
+    - kerneloops
+    - ModemManager
+    - snapd
+    - whoopsie
+    - wpa_supplicant
+
 - name: Enable services
   systemd:
     name: "{{ item }}"
