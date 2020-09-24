@@ -185,11 +185,6 @@
   loop:
     - ./files/skyhub/skyhub-pipe
 
-- name: Reloading systemctl daemon
-  systemd:
-    daemon_reload: yes
-
-
 - name: Configuring Docker with NVIDIA Runtime
   copy:
     src: "{{ item }}"
@@ -199,10 +194,11 @@
     - ./files/etc/docker/daemon.json
   
 - name: Enable services
-  service:
+  systemd:
     name: "{{ item }}"
-    state: started
-    enabled: true
+    state: restarted
+    enabled: yes
+    daemon_reload: yes
   become: true
   loop:
     - gpsd
