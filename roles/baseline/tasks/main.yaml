@@ -1,6 +1,8 @@
 - hostname:
     name: skyhub-tracker
 
+# -name: Clean up old installations if we detect this is an upgrade from the old installer
+# a good way to check is to see if this file exists /skyhub/install I think
 
 - name: Discover existing Sky Hub Storage
   set_fact:
@@ -75,7 +77,7 @@
       fstype: ext4
       dev: '{{ storage_disk }}'
       opts: -L SKYHUB_STORAGE
-      
+
   - name: Mounting Sky Hub Storage device
     ansible.posix.mount:
       path: /skyhub/storage
@@ -263,7 +265,7 @@
   command: systemctl set-default multi-user.target
   when: runlevel.stdout != "multi-user.target"
 
-- name: Installing Sky Hub pipe
+- name: Copying openssl config file
   copy:
     src: "{{ item }}"
     dest: /skyhub/storage/certs
