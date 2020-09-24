@@ -280,7 +280,7 @@
     openssl genrsa -out /skyhub/storage/certs/service.key 4096
     openssl req -new -key /skyhub/storage/certs/service.key -batch -config /skyhub/storage/certs/openssl.cnf -out /skyhub/storage/certs/service.csr 
     openssl x509 -req -in /skyhub/storage/certs/service.csr -CA /skyhub/storage/certs/ca.cert -CAkey /skyhub/storage/certs/ca.key -CAcreateserial -out /skyhub/storage/certs/service.pem -days 1825 -sha256 -extfile /skyhub/storage/certs/openssl.cnf -extensions v3_ca
-    exit 0a
+    exit 0
   args:
     executable: /bin/bash
 
