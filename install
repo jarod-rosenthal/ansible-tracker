@@ -8,9 +8,9 @@ apt-get install -qq -y git ansible
 if [ ! -d ansible-tracker ]; then
 	git -q clone https://gitlab.com/skyhuborg/ansible-tracker.git
 else
-	pushd ansible-tracker
-	git pull
-	popd
+	cd ansible-tracker
+	git -q pull
+	cd ..	
 fi
 
 cd ansible-tracker
