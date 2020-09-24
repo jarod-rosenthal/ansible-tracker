@@ -115,7 +115,7 @@
   lineinfile:
     path: /etc/hosts
     regexp: '^GPSD_OPTIONS=""'
-    line: GPSD_OPTIONS="-n -G ${*}"
+    line: GPSD_OPTIONS="-n -G"
     owner: root
     group: root
     mode: '0644'
