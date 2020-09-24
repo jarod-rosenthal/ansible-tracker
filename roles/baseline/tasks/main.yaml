@@ -217,7 +217,8 @@
     dest: /bin/
     mode: 666
   loop:
-    - ./files/skyhub/skyhub-pipe
+    - ./files/bin/skyhub-pipe
+    - ./files/bin/skyhub
 
 - name: Configuring Docker with NVIDIA Runtime
   copy:
