@@ -47,8 +47,7 @@
     path: /skyhub/storage
     src: LABEL=SKYHUB_STORAGE
     fstype: ext4
-    state: present
-
+    state: mounted
 
 #- name: Upgrade packages
 #  apt:
