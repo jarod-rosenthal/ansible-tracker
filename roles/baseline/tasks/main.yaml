@@ -4,6 +4,10 @@
 # -name: Clean up old installations if we detect this is an upgrade from the old installer
 # a good way to check is to see if this file exists /skyhub/install I think
 
+- name: Initialized storage_configured variable
+  set_fact:
+    storage_configured: false
+    
 - name: Discover existing Sky Hub Storage
   set_fact:
     storage_configured: true
