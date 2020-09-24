@@ -13,6 +13,4 @@ else
 	cd ..	
 fi
 
-cd ansible-tracker
-
-ansible-playbook jetson.yml
+cd ansible-tracker && ansible-playbook jetson.yml
