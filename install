@@ -1,0 +1,5 @@
+#!/bin/bash
+
+apt install -y git ansible
+
+git clone https://gitlab.com/skyhuborg/ansible-tracker.git
