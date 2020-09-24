@@ -122,7 +122,7 @@
 
 - name: Setting up GPSD Service
   lineinfile:
-    path: /etc/hosts
+    path: /etc/default/gpsd
     regexp: '^GPSD_OPTIONS=""'
     line: GPSD_OPTIONS="-n -G"
     owner: root
@@ -218,7 +218,8 @@
     dest: /bin/
     mode: 666
   loop:
-    - ./files/skyhub/skyhub-pipe
+    - ./files/bin/skyhub-pipe
+    - ./files/bin/skyhub
 
 - name: Configuring Docker with NVIDIA Runtime
   copy:
