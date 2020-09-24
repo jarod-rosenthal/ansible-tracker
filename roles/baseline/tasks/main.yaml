@@ -149,7 +149,7 @@
     ssh_key_file: .ssh/id_rsa
     shell: /bin/bash
     password: "{{ 'skyhub123' | password_hash('sha512') }}"
-    groups: docker
+    groups: docker,sudo
     update_password: on_create
 
 - name: Adding Sky Hub user to sudoers
@@ -172,16 +172,17 @@
     - /skyhub/storage/certs
     - /skyhub/storage/docker
 
-- name: Cloning get-started repository
-  git:
-    repo: https://gitlab.com/skyhuborg/get-started.git
-    dest: ~/get-started
-    update: yes
+# - name: Cloning get-started repository
+#   git:
+#     repo: https://gitlab.com/skyhuborg/get-started.git
+#     dest: ~/get-started
+#     update: yes
 
 - name: Copying Sky Hub CLI
   copy:
-    src: ~/get-started/deploy/
-    dest: /skyhub
+    src: ./files/skyhub/skyhub
+    dest: /bin
+    mode: 744
 
 - name: Configuring udev rules
   copy:
