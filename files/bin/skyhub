@@ -43,15 +43,7 @@ fi
 
 startSkyhub() {
     echo "Starting skyhub docker containers"
-    sudo docker network create skyhub-network
-
-    echo "Starting gpsd"
-    sudo docker run -d \
-        --name skyhub-gpsd --privileged --restart unless-stopped \
-        --network skyhub-network --device /dev/ttyAMA0:/dev/ttyAMA0 \
-        --device /dev/ttyACM0:/dev/ttyACM0 --log-opt max-size=10m \
-        --log-opt max-file=5 \
-        skyhuborg/gpsd:latest -D2 /dev/ttyACM0 
+    sudo docker network create -d bridge --subnet 192.168.42.0/24 --gateway 192.168.42.1 skyhub-network
 
     echo "Starting mysql"
     docker run -d --name skyhub-mysql \
@@ -89,7 +81,7 @@ startSkyhub() {
         --env device-path-witmotion=/dev/$(readlink /dev/hwt901b) \
         --env profile:0 \
         --env controller-trackerd-server-addr=skyhub-tracker-controller:8089 \
-        --env gpsd-addr=skyhub-gpsd:2947 \
+        --env gpsd-addr=192.168.42.1:2947 \
         --env upload-server-addr=https://trackerd-upload-dev.skyhub.org \
         --env trackerd-server-addr=trackerd-dev.skyhub.org:8088 \
         --env auto-tls-server-name=trackerd-dev.skyhub.org \
@@ -118,9 +110,6 @@ stopSkyhub() {
 
     sudo docker network rm skyhub_skyhub-network || true
     sudo docker network rm skyhub-network || true
-
-    echo  "Removing gpsd"
-    sudo docker rm -f skyhub-gpsd || true
 
     echo  "Removing mysql"
     sudo docker stop skyhub-mysql || true
@@ -182,9 +171,6 @@ resetSkyHubConfig() {
 updateSkyHub() {
     stopSkyhub
 
-    echo "Updating gpsd"
-    docker pull skyhuborg/gpsd:latest
-
     echo "Updating tracker"
     docker pull skyhuborg/tracker:develop
 
@@ -215,7 +201,7 @@ elif [ "$1" = "start" ]; then
 elif [ "$1" = "stop" ]; then
     stopSkyhub
 elif [ "$1" = "mysql" ]; then
-    docker exec -it skyhub-mysql mysql -u skyhub -p3fSS34f03lls skyhub
+    docker exec -it skyhub-mysql mysql -u skyhub -p3fSS34f03lls
 elif [ "$1" = "restart" ]; then
     stopSkyhub
     startSkyhub
@@ -223,8 +209,8 @@ elif [ "$1" = "update" ]; then
     updateSkyHub
 elif [ "$1" = "upgrade" ]; then
     bash -c 'sudo wget -O - https://gitlab.com/skyhuborg/get-started/-/raw/master/deploy/install | sudo bash'
-elif [ "$1" = "reset" ]; then    
-    resetSkyHub
+# elif [ "$1" = "reset" ]; then    
+#     resetSkyHub
 elif [ "$1" = "resetdb" ]; then    
     resetSkyHubDB
 elif [ "$1" = "resetconfig" ]; then    

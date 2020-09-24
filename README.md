@@ -1,4 +1,3 @@
 # Run Installer
 
-sudo wget -q -O - https://gitlab.com/skyhuborg/ansible-tracker/-/raw/master/install | sudo bash
-
+sudo wget "https://gitlab.com/skyhuborg/ansible-tracker/-/raw/master/install" -O "install" -o /dev/null && chmod u+x ./install && sudo bash -c 'source ./install'

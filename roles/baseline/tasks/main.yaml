@@ -180,7 +180,7 @@
 
 - name: Copying Sky Hub CLI
   copy:
-    src: ./files/skyhub/skyhub
+    src: ./files/bin/skyhub
     dest: /bin
     mode: 744
 
