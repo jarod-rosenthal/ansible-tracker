@@ -181,12 +181,6 @@
 #     dest: ~/get-started
 #     update: yes
 
-- name: Copying Sky Hub CLI
-  copy:
-    src: ./files/bin/skyhub
-    dest: /bin
-    mode: 744
-
 - name: Configuring udev rules
   copy:
     src: "{{ item }}"
@@ -215,13 +209,14 @@
   loop:
     - ./files/skyhub/clock.sh
 
-- name: Installing Sky Hub pipe
+- name: Installing Sky Hub files
   copy:
     src: "{{ item }}"
     dest: /bin/
     mode: 666
   loop:
     - ./files/bin/skyhub-pipe
+    - ./files/bin/skyhub-startup
     - ./files/bin/skyhub
 
 - name: Configuring Docker with NVIDIA Runtime
