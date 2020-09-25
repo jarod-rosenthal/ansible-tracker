@@ -30,20 +30,9 @@ if [ "$1" = "help" ]; then
     exit
 fi
 
-# ensure running as root
-#if [ "$(id -u)" != "0" ]; then
-#  exec sudo "$0" "$@"
-#fi
-
-# if [[ $UID != 0 ]]; then
-#     echo "Please run this script with sudo:"
-#     echo "sudo $0 $*"
-#     exit 1
-# fi
-
 startSkyhub() {
     echo "Starting skyhub docker containers"
-    sudo docker network create -d bridge --subnet 192.168.42.0/24 --gateway 192.168.42.1 skyhub-network
+    [ ! "$(sudo docker network ls | grep skyhub-network)" ] && sudo docker network create -d bridge --subnet 192.168.42.0/24 --gateway 192.168.42.1 skyhub-network
 
     echo "Starting mysql"
     docker run -d --name skyhub-mysql \
@@ -107,8 +96,7 @@ startSkyhub() {
 stopSkyhub() {
     echo "Stopping skyhub docker containers"
 
-    sudo docker network rm skyhub_skyhub-network || true
-    sudo docker network rm skyhub-network || true
+    [ ! "$(sudo docker network ls | grep skyhub_skyhub-network)" ] && sudo docker network rm skyhub_skyhub-network || true
 
     echo  "Removing mysql"
     sudo docker stop skyhub-mysql || true
@@ -122,6 +110,9 @@ stopSkyhub() {
 
     echo "Removing tracker-ui"
     sudo docker rm -f skyhub-tracker-ui || true
+
+    echo "Removing skyhub-network"
+    sudo docker network rm skyhub-network || true
 }
 
 resetSkyHub() {
@@ -207,7 +198,7 @@ elif [ "$1" = "restart" ]; then
 elif [ "$1" = "update" ]; then
     updateSkyHub
 elif [ "$1" = "upgrade" ]; then
-    bash -c 'sudo wget -O - https://gitlab.com/skyhuborg/get-started/-/raw/master/deploy/install | sudo bash'
+    bash -c 'sudo wget --no-cache "https://gitlab.com/skyhuborg/ansible-tracker/-/raw/master/install" -O "install" -o /dev/null && sudo chmod u+x ./install && sudo bash -c "source ./install"'
 # elif [ "$1" = "reset" ]; then    
 #     resetSkyHub
 elif [ "$1" = "resetdb" ]; then    
