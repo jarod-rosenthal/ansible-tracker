@@ -1,23 +1,48 @@
 - hostname:
     name: skyhub-tracker
 
-- name: Initialized storage_configured variable
-  set_fact:
-    storage_configured: false
+  - name: Initialize variables
+    set_fact: "{{ variable }}={{ value }}"
+    with_items:
+      - { variable: 'existing_install', value: 'false' }
+      - { variable: 'needs_cleanup', value: 'false' }
+      - { variable: 'storage_configured', value: 'false' }
 
-- name: Initialized needs_cleanup variable
-  set_fact:
-    needs_cleanup: false
+# - name: Initialized needs_cleanup variable
+#   set_fact:
+#     needs_cleanup: false
 
-- name: Checking existing installation
+# - name: Initialized storage_configured variable
+#   set_fact:
+#     storage_configured: false
+
+- name: Is skyhub in the path
+  shell: "which skyhub"
+  register: skyhub_inpath_result
+  ignore_errors: true
+
+- name: Initialize existing_install
+  set_fact: 
+    existing_install:true
+  when: skyhub_inpath_result.rc != 0
+
+- name: Checking old installation
   stat:
     path: /skyhub/skyhub
-  register: needs_cleanup_result
+  register: old_skyhub_result
+
+- name: Stop Sky Hub containers if they are present
+  shell: "skyhub stop"
+  when: existing_install == true
+
+- name: Install jmespath python package
+  pip:
+    name: jmespath
 
 - name: Initialized storage_configured variable
   set_fact:
     needs_cleanup: true
-  when: needs_cleanup_result.stat.exists == true
+  when: old_skyhub_result.stat.exists == true
 
 - name: Discover existing Sky Hub Storage
   set_fact:
@@ -33,10 +58,6 @@
    - item.key is search ("sd") or item.key is search("nvme")
    - storage_configured != true
   with_dict: "{{ ansible_devices }}"
-
-- name: Install jmespath python package
-  pip:
-    name: jmespath
 
 - name: Storage disk initialization confirmation
   pause:
@@ -240,3 +261,7 @@
 - name: Include cleanup code for old installs
   include: cleanup.yml
   when: needs_cleanup == true
+
+- name: Stop Sky Hub containers if they are present
+  shell: "skyhub start"
+  when: existing_install == true

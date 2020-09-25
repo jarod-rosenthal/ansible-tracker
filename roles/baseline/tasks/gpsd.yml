@@ -1,4 +1,3 @@
-
 - name: GPSD Setup
   block:
     - name: Setting up GPSD Service
