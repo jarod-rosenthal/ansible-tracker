@@ -17,6 +17,11 @@ case $1 in
     TRACKERENV=test
     ;;
 
+  staging)
+    echo -n "Running staging / prod environment"
+    GITBRANCH=develop
+    TRACKERENV=prod
+    ;;
 
   *)
     echo -n "Running prod environment"
