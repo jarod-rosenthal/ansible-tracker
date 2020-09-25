@@ -1,14 +1,27 @@
 #!/bin/bash
 
 echo "Initializing the Sky Hub Installer..."
+GITBRANCH=master
+TRACKERENV=prod
+case $COUNTRY in
 
-if [ -z "$1" ]; then
-  echo "Running on master branch"
-  GITBRANCH=master
-else
-  echo "Running on $1 branch"
-  GITBRANCH=$1
-fi
+  dev)
+    echo -n "Running dev environement"
+    GITBRANCH=develop
+    TRACKERENV=dev
+    ;;
+
+  test)
+    echo -n "Running test environement"
+    GITBRANCH=test
+    TRACKERENV=test
+    ;;
+
+
+  *)
+    echo -n "Running prod environement"
+    ;;
+esac
 
 apt-get -qq update 
 apt-get install -qq -y git python3-pip
@@ -27,7 +40,7 @@ git clone -q https://gitlab.com/skyhuborg/ansible-tracker.git
 cd ansible-tracker
 git checkout $GITBRANCH
 
-ansible-playbook jetson.yaml
+ansible-playbook $TRACKERENV.yml
 #ANSIBLE_STDOUT_CALLBACK=actionable sudo -E ansible-playbook ansible-tracker/jetson.yaml
 
 cd ..

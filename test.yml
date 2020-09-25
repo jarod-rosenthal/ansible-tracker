@@ -1,0 +1,14 @@
+- name: Apply baseline configuration for tracker.
+  hosts: all
+  connection: local
+  roles:
+    - baseline
+  vars:
+    existing_install: 'false'
+    needs_cleanup: 'false'
+    storage_configure: 'false'
+    env: 'test' 
+    git_branch: 'develop'
+    upload_server_addr: 'https://trackerd-upload-dev.skyhub.org'
+    trackerd_server_addr: 'trackerd-dev.skyhub.org:8088'
+    trackerd_auto_tls_name: 'trackerd-dev.skyhub.org'    
