@@ -1,0 +1,10 @@
+[Unit]
+Description=Sky Hub Startup
+After=multi-user.target
+
+[Service]
+ExecStart=/bin/sh /skyhub/skyhub-startup
+
+[Install]
+WantedBy=multi-user.target
+
