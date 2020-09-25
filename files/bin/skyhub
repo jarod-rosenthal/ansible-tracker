@@ -17,7 +17,7 @@ showUsage() {
     echo "      status        - Lists the running containers"
     echo "      monitor       - Monitors the skyhub-tracker logs"
     echo "      mysql         - Opens a connection to mysql"
-    echo "      reset         - Resets the tracker config and removes the old database (does not delete videos)"
+    #echo "      reset         - Resets the tracker config and removes the old database (does not delete videos)"
     echo "      resetdb       - Resets the mysql database"
     echo "      resetconfig   - Resets the track configuration (You will have to rerun the setup wizard)"
     echo "      help          - Shows this help"
