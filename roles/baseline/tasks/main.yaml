@@ -274,7 +274,7 @@
   when: needs_cleanup == true
 
 - name: Source the platform vars
-  shell: "source jetson-vars"
+  shell: "source /bin/jetson-vars"
 
 - name: Stop Sky Hub containers if they are present
   shell: "skyhub start"
