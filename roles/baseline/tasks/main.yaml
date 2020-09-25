@@ -152,6 +152,13 @@
     group: root
     mode: '0644'
 
+- name: Setting up GPSD Listen ports
+  lineinfile:
+    path: /lib/systemd/system/gpsd.socket
+    regexp: '^ListenStream=\n'
+    insertafter: '[Socket]'
+    line: ListenStream=
+
 - name: Sync system time with GPS Receiver
   lineinfile:
     path: /etc/chrony/chrony.conf
