@@ -141,7 +141,6 @@
     group: root
     mode: '0644'
 
-
 - name: Sync system time with GPS Receiver
   lineinfile:
     path: /etc/chrony/chrony.conf
@@ -185,12 +184,6 @@
     - /skyhub/storage/certs
     - /skyhub/storage/docker
 
-# - name: Cloning get-started repository
-#   git:
-#     repo: https://gitlab.com/skyhuborg/get-started.git
-#     dest: ~/get-started
-#     update: yes
-
 - name: Configuring udev rules
   copy:
     src: "{{ item }}"
@@ -209,7 +202,7 @@
     mode: 644
   loop:
     - ./files/etc/systemd/system/skyhub-pipe.service
-    - ./files/etc/systemd/system/skyhub-clocks.service
+    - ./files/etc/systemd/system/skyhub-startup.service
 
 - name: Installing Sky Hub files
   copy:
@@ -242,6 +235,8 @@
     - snapd
     - whoopsie
     - wpa_supplicant
+    - skyhub-clocks
+    - chrony # adding here to see if stop and staring will fix the gpsd
 
 - name: Enable services
   systemd:
@@ -257,7 +252,7 @@
     - ssh
     - docker
     - skyhub-pipe
-    - skyhub-clocks
+    - skyhub-startup
 
 - name: get default runlevel
   command: systemctl get-default
@@ -307,3 +302,8 @@
     - /skyhub/install
     - /skyhub/clock.sh
     - /skyhub/skyhub
+    - /etc/systemd/system/skyhub-clocks.service
+
+- name: Systemd reload
+  systemd:
+    daemon_reload: yes    
