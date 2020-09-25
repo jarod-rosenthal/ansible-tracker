@@ -2,6 +2,14 @@
 
 echo "Initializing the Sky Hub Installer..."
 
+if [ -z "$1" ]; then
+  echo "Running on master branch"
+  GITBRANCH=master
+else
+  echo "Running on $1 branch"
+  GITBRANCH=$1
+fi
+
 apt-get -qq update 
 apt-get install -qq -y git
 
@@ -17,7 +25,9 @@ fi
 git clone -q https://gitlab.com/skyhuborg/ansible-tracker.git
 
 cd ansible-tracker
+git checkout $GITBRANCH
+cd ..
 
-ansible-playbook jetson.yaml
+ansible-playbook ansible-tracker/jetson.yaml
 #this is for when we go to production
-#ANSIBLE_STDOUT_CALLBACK=actionable sudo -E ansible-playbook jetson.yaml
+#ANSIBLE_STDOUT_CALLBACK=actionable sudo -E ansible-playbook ansible-tracker/jetson.yaml

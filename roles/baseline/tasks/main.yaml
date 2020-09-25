@@ -186,7 +186,7 @@
     src: "{{ item }}"
     dest: /etc/udev/rules.d/
   loop:
-    - ./files/etc/udev/rules.d/99-skyhub-device.rules
+    - ./ansible-tracker/files/etc/udev/rules.d/99-skyhub-device.rules
 
 - name: Reloading udev rules
   shell:
@@ -198,8 +198,8 @@
     dest: /etc/systemd/system/
     mode: 644
   loop:
-    - ./files/etc/systemd/system/skyhub-pipe.service
-    - ./files/etc/systemd/system/skyhub-clocks.service
+    - ./ansible-tracker/files/etc/systemd/system/skyhub-pipe.service
+    - ./ansible-tracker/files/etc/systemd/system/skyhub-clocks.service
 
 - name: Installing clock service
   copy:
@@ -207,7 +207,7 @@
     dest: /skyhub/
     mode: u+rwx
   loop:
-    - ./files/skyhub/clock.sh
+    - ./ansible-tracker/files/skyhub/clock.sh
 
 - name: Installing Sky Hub files
   copy:
@@ -215,9 +215,9 @@
     dest: /bin/
     mode: 666
   loop:
-    - ./files/bin/skyhub-pipe
-    - ./files/bin/skyhub-startup
-    - ./files/bin/skyhub
+    - ./ansible-tracker/files/bin/skyhub-pipe
+    - ./ansible-tracker/files/bin/skyhub-startup
+    - ./ansible-tracker/files/bin/skyhub
 
 - name: Configuring Docker with NVIDIA Runtime
   copy:
@@ -225,7 +225,7 @@
     dest: /etc/docker/
     mode: 755
   loop:
-    - ./files/etc/docker/daemon.json
+    - ./ansible-tracker/files/etc/docker/daemon.json
   
 - name: Disable services
   systemd:
@@ -271,7 +271,7 @@
     dest: /skyhub/storage/certs
     mode: 666
   loop:
-    - ./files/openssl.cnf
+    - ./ansible-tracker/files/openssl.cnf
 
 - name: Generate Sky Hub certificates
   shell: |
