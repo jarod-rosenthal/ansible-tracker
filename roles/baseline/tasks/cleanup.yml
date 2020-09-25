@@ -1,43 +1,46 @@
-- name: Cleanup old installer files
-  file:
-    path: "{{ item }}"
-    state: absent
-  loop: 
-    - /skyhub/install
-    - /skyhub/clock.sh
-    - /skyhub/skyhub
+- name: Cleanup old installations
+  block:
+  ignore_errors: yes
+  - name: Cleanup old installer files
+    file:
+      path: "{{ item }}"
+      state: absent
+    loop: 
+      - /skyhub/install
+      - /skyhub/clock.sh
+      - /skyhub/skyhub
 
-- name: Remove old sudoers lines
-  lineinfile:
-    path: /etc/sudoers
-    state: absent
-    line: "{{ item }}"
-  loop:
-    - skyhub ALL=(ALL) NOPASSWD:/skyhub/skyhub
-    - \#skyhub additions
-    - root ALL=(ALL) NOPASSWD:/skyhub/skyhub
+  - name: Remove old sudoers lines
+    lineinfile:
+      path: /etc/sudoers
+      state: absent
+      line: "{{ item }}"
+    loop:
+      - skyhub ALL=(ALL) NOPASSWD:/skyhub/skyhub
+      - \#skyhub additions
+      - root ALL=(ALL) NOPASSWD:/skyhub/skyhub
 
-- name: Check if Clocks Service Exists
-  stat: path=/etc/systemd/system/skyhub-clocks.service
-  register: clocks_service_status
+  - name: Check if Clocks Service Exists
+    stat: path=/etc/systemd/system/skyhub-clocks.service
+    register: clocks_service_status
 
-- name: Cleanup old services
-  systemd:
-    name: skyhub-clocks
-    state: stopped
-    enabled: no
-  become: true
-  loop: 
-    - skyhub-clocks
-  when: clocks_service_status.stat.exists
+  - name: Cleanup old services
+    systemd:
+      name: skyhub-clocks
+      state: stopped
+      enabled: no
+    become: true
+    loop: 
+      - skyhub-clocks
+    when: clocks_service_status.stat.exists
 
-- name: Cleanup old installer files
-  file:
-    path: "{{ item }}"
-    state: absent
-  loop: 
-    - /etc/systemd/system/skyhub-clocks.service
+  - name: Cleanup old installer files
+    file:
+      path: "{{ item }}"
+      state: absent
+    loop: 
+      - /etc/systemd/system/skyhub-clocks.service
 
-- name: Systemd reload
-  systemd:
-  daemon_reload: yes    
+  - name: Systemd reload
+    systemd:
+      daemon_reload: yes  
