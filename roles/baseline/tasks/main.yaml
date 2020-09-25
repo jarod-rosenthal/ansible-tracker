@@ -165,8 +165,7 @@
     state: present
     line: "{{ item }}"
   loop:
-    - refclock SHM 0 refid GPS precision 1e-1 offset 0.9999 delay 0.2
-    - refclock SHM 1 refid PPS precision 1e-7
+    - refclock SHM  0 delay 0.5 refid GPS
 
 - pip:
     name: jetson-stats
