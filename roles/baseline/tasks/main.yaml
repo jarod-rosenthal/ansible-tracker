@@ -21,7 +21,6 @@
 - name: Print skyhub_inpath_result
   debug:
     var: skyhub_inpath_result
-    verbosity: 4
 
 - name: Initialize existing_install
   set_fact: 
