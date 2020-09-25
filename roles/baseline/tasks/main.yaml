@@ -155,7 +155,7 @@
 - name: Setting up GPSD Listen ports
   lineinfile:
     path: /lib/systemd/system/gpsd.socket
-    regexp: '^ListenStream=\n'
+    regexp: '^ListenStream='
     insertafter: '[Socket]'
     line: ListenStream=
 
