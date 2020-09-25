@@ -6,20 +6,20 @@ TRACKERENV=prod
 case $1 in
 
   dev)
-    echo -n "Running dev environement"
+    echo -n "Running dev environment"
     GITBRANCH=develop
     TRACKERENV=dev
     ;;
 
   test)
-    echo -n "Running test environement"
+    echo -n "Running test environment"
     GITBRANCH=test
     TRACKERENV=test
     ;;
 
 
   *)
-    echo -n "Running prod environement"
+    echo -n "Running prod environment"
     ;;
 esac
 
