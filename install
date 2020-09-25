@@ -46,8 +46,7 @@ git clone -q https://gitlab.com/skyhuborg/ansible-tracker.git
 cd ansible-tracker
 git checkout $GITBRANCH
 
-ansible-playbook $TRACKERENV.yml
-#ANSIBLE_STDOUT_CALLBACK=actionable sudo -E ansible-playbook ansible-tracker/jetson.yaml
+ANSIBLE_STDOUT_CALLBACK=actionable ansible-playbook $TRACKERENV.yml
 
 cd ..
 rm -r ./ansible-tracker
