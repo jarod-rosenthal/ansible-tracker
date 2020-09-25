@@ -9,6 +9,8 @@ if [ ! -p $pipe ]; then
   mkfifo $pipe
 fi
 
+chmod 666 $pipe
+
 while true
 do
     if read line <$pipe; then
