@@ -28,10 +28,10 @@ case $1 in
     ;;
 esac
 
+echo "Installing ansible, this step may take a while."
 apt-get -qq update 
 apt-get install -qq -y git python3-pip
 
-echo "Installing ansible, this step may take a while."
 pip3 -q install ansible
 
 ansible-galaxy collection install ansible.posix -p ~/.ansible/collections
