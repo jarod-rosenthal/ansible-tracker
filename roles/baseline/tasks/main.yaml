@@ -24,8 +24,8 @@
 
 - name: Initialize existing_install
   set_fact: 
-    existing_install:true
-  when: skyhub_inpath_result.rc != 0
+    existing_install: true
+  when: skyhub_inpath_result.stdout != ""
 
 - name: Checking old installation
   stat:
