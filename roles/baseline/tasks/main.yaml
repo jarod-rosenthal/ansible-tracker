@@ -276,6 +276,6 @@
 - name: Source the platform vars
   shell: "source jetson-vars"
 
-  - name: Stop Sky Hub containers if they are present
+- name: Stop Sky Hub containers if they are present
   shell: "skyhub start"
   when: existing_install == true
