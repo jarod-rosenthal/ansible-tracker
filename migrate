@@ -1,0 +1,11 @@
+#!/bin/bash
+
+echo "Cleaning up old installation"
+
+sudo docker rm -f skyhib-gpsd
+sudo docker rm -f skyhib-mysql
+sudo docker rm -f skyhib-tracker
+sudo docker rm -f skyhib-tracker-controller
+sudo docker rm -f skyhib-tracker-ui
+
+sudo docker system prune
