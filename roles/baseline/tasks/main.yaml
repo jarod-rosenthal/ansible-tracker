@@ -205,7 +205,7 @@
   copy:
     src: "{{ item }}"
     dest: /bin/
-    mode: 666
+    mode: 555
   loop:
     - ./files/bin/skyhub-pipe
     - ./files/bin/skyhub-startup
@@ -292,3 +292,8 @@
   file:
     path: /skyhub/clock.sh
     state: absent
+
+- name: Cleanup old installer
+  file:
+    path: /skyhub/install
+    state: absent    
