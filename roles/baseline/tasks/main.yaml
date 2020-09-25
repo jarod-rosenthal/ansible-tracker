@@ -205,7 +205,7 @@
   copy:
     src: "{{ item }}"
     dest: /bin/
-    mode: 555
+    mode: '0555'
   loop:
     - ./files/bin/skyhub-pipe
     - ./files/bin/skyhub-startup
@@ -261,7 +261,7 @@
   copy:
     src: "{{ item }}"
     dest: /skyhub/storage/certs
-    mode: 666
+    mode: 0666
   loop:
     - ./files/openssl.cnf
 
