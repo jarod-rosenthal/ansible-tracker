@@ -3,7 +3,7 @@
 echo "Initializing the Sky Hub Installer..."
 GITBRANCH=master
 TRACKERENV=prod
-case $COUNTRY in
+case $1 in
 
   dev)
     echo -n "Running dev environement"
