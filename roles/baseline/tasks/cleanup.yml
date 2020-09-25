@@ -8,6 +8,9 @@
       - /skyhub/install
       - /skyhub/clock.sh
       - /skyhub/skyhub
+      - /skyhub/skyhub~
+      - /skyhub/modprobe
+      - /skyhub/skyhub-pipe
 
   - name: Remove old sudoers lines
     lineinfile:
