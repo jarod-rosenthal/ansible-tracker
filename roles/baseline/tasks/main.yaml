@@ -265,6 +265,11 @@
   loop:
     - ./files/openssl.cnf
 
+- name: Stat service.pem cert
+  stat:
+    path: /skyhub/storage/certs/service.pem
+  register: result
+
 - name: Generate Sky Hub certificates
   shell: |
     openssl genrsa -out /skyhub/storage/certs/ca.key 4096
@@ -275,6 +280,7 @@
     exit 0
   args:
     executable: /bin/bash
+  when: result.stat.exists == false    
 
 - name: Blacklist kernel modules
   kernel_blacklist:
