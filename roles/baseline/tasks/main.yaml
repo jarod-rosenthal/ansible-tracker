@@ -1,10 +1,14 @@
 - hostname:
     name: skyhub-tracker
 
-- name: Checking existing installation
-  stat:
-    path: /skyhub/skyhub
-  register: existing_install_result
+# - name: Checking existing installation
+#   stat:
+#     path: /skyhub/skyhub
+#   register: existing_install_result
+
+- name: Initialized storage_configured variable
+  set_fact:
+    existing_install: true
 
 - name: Initialized storage_configured variable
   set_fact:
@@ -297,4 +301,4 @@
 
 - name: Include cleanup code for old installs
   include: cleanup.yml
-  when: existing_install_result.stat.exists == true
+  when: existing_install == true
