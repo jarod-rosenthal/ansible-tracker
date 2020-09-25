@@ -38,8 +38,11 @@
 
 - name: Install jmespath python package
   pip:
-    name: jmespath
+    name: "{{ item }}"
     executable: pip3
+  loop:
+    - jmespath
+    - jetson-stats
 
 - name: Set timezone to UTC
   command: timedatectl set-timezone UTC    
@@ -111,8 +114,6 @@
 - name: Include gpsd modifications
   include: gpsd.yml
 
-- pip:
-    name: jetson-stats
 
 - name: Creating Sky Hub User
   user:
