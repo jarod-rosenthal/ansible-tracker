@@ -188,8 +188,13 @@
   loop:
     - ./files/bin/skyhub-pipe
     - ./files/bin/skyhub-startup
-    - ./files/bin/skyhub
     - ./files/bin/jetson-vars
+
+- name: Configuring Sky Hub CLI
+  template:
+    src: /templates/skyhub.j2
+    dest: /bin/skyhub
+    mode: '0555'
 
 - name: Configuring Docker with NVIDIA Runtime
   copy:
