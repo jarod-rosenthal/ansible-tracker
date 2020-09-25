@@ -294,15 +294,27 @@
   loop:
     - bluedroid_pm
 
-- name: Cleanup old installer files
-  file:
-    path: "{{ item }}"
-    state: absent
-  loop: 
-    - /skyhub/install
-    - /skyhub/clock.sh
-    - /skyhub/skyhub
-    - /etc/systemd/system/skyhub-clocks.service
+- name : Cleanup old installations
+  block:
+  - name: Cleanup old installer files
+    file:
+      path: "{{ item }}"
+      state: absent
+    loop: 
+      - /skyhub/install
+      - /skyhub/clock.sh
+      - /skyhub/skyhub
+      - /etc/systemd/system/skyhub-clocks.service
+
+  - name: Remove old sudoers lines
+    lineinfile:
+      path: /etc/sudoers
+      state: absent
+      line: "{{ item }}"
+    loop:
+      - skyhub ALL=(ALL) NOPASSWD:/skyhub/skyhub
+      - \#skyhub additions
+      - root ALL=(ALL) NOPASSWD:/skyhub/skyhub
 
 - name: Systemd reload
   systemd:
