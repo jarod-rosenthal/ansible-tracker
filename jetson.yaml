@@ -4,3 +4,7 @@
   connection: local
   roles:
     - baseline
+  vars:
+    existing_install: 'false'
+    needs_cleanup: 'false'
+    storage_configure: ' false'    

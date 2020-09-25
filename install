@@ -12,6 +12,7 @@ fi
 
 apt-get -qq update 
 apt-get install -qq -y git
+apt-get install -qq -y python3-pip
 
 pip -q install ansible
 

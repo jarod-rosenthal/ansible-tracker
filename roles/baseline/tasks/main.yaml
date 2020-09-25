@@ -1,26 +1,26 @@
 - hostname:
     name: skyhub-tracker
 
-- name: Initialized existing_install variable
-  set_fact:
-    existing_install: false
+# - name: Initialized existing_install variable
+#   set_fact:
+#     existing_install: false
 
-- name: Initialized needs_cleanup variable
-  set_fact:
-    needs_cleanup: false
+# - name: Initialized needs_cleanup variable
+#   set_fact:
+#     needs_cleanup: false
 
-- name: Initialized storage_configured variable
-  set_fact:
-    storage_configured: false
+# - name: Initialized storage_configured variable
+#   set_fact:
+#     storage_configured: false
 
 - name: Is skyhub in the path
   shell: "which skyhub"
   register: skyhub_inpath_result
   ignore_errors: true
 
-- name: Print skyhub_inpath_result
-  debug:
-    var: skyhub_inpath_result
+# - name: Print skyhub_inpath_result
+#   debug:
+#     var: skyhub_inpath_result
 
 - name: Initialize existing_install
   set_fact: 
@@ -39,6 +39,10 @@
 - name: Install jmespath python package
   pip:
     name: jmespath
+
+- name: Set timezone to UTC
+  command: timedatectl set-timezone UTC    
+  when: ansible_date_time.tz != 'UTC'
 
 - name: Initialized storage_configured variable
   set_fact:
