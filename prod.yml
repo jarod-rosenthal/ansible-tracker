@@ -7,7 +7,7 @@
     existing_install: 'false'
     needs_cleanup: 'false'
     storage_configure: 'false'
-    env: 'prod' 
+    tracker_env: 'prod' 
     git_branch: 'master'
     upload_server_addr: 'https://trackerd-upload.skyhub.org'
     trackerd_server_addr: 'trackerd.skyhub.org:8088'
