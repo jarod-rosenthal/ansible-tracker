@@ -31,7 +31,7 @@ esac
 apt-get -qq update 
 apt-get install -qq -y git python3-pip
 
-pip -q install ansible
+pip3 -q install ansible
 
 ansible-galaxy collection install ansible.posix -p ~/.ansible/collections
 ansible-galaxy collection install community.general -p ~/.ansible/collections
