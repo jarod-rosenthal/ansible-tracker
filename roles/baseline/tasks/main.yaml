@@ -155,7 +155,7 @@
 - name: Setting up GPSD Listen ports
   lineinfile:
     path: /lib/systemd/system/gpsd.socket
-    insertafter: '[Socket]'
+    insertBefore: 'ListenStream=/var/run/gpsd.sock'
     line: ListenStream=
 
 - name: Sync system time with GPS Receiver
