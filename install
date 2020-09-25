@@ -28,10 +28,10 @@ cd ansible-tracker
 git checkout $GITBRANCH
 
 ansible-playbook jetson.yaml
+#ANSIBLE_STDOUT_CALLBACK=actionable sudo -E ansible-playbook ansible-tracker/jetson.yaml
 
 cd ..
 rm -r ./ansible-tracker
 rm ./install
 
 #this is for when we go to production
-#ANSIBLE_STDOUT_CALLBACK=actionable sudo -E ansible-playbook ansible-tracker/jetson.yaml
