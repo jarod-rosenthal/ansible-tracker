@@ -134,38 +134,8 @@
       - gpsd-clients
       - chrony
 
-- name: Setting up GPSD Service
-  lineinfile:
-    path: /etc/default/gpsd
-    regexp: '^GPSD_OPTIONS=""'
-    line: GPSD_OPTIONS="-n -G"
-    owner: root
-    group: root
-    mode: '0644'
-
-- name: Setting up GPSD Listen ports
-  lineinfile:
-    path: /lib/systemd/system/gpsd.socket
-    regexp: '^ListenStream=127.0.0.1:2947'
-    line: ListenStream=0.0.0.0:2947    
-    owner: root
-    group: root
-    mode: '0644'
-
-- name: Setting up GPSD Listen ports
-  lineinfile:
-    path: /lib/systemd/system/gpsd.socket
-    insertbefore: 'ListenStream=/var/run/gpsd.sock'
-    line: ListenStream=
-    state: present
-
-- name: Sync system time with GPS Receiver
-  lineinfile:
-    path: /etc/chrony/chrony.conf
-    state: present
-    line: "{{ item }}"
-  loop:
-    - refclock SHM  0 delay 0.5 refid GPS
+- name: Include gpsd modifications
+  include: gpsd.yml
 
 - pip:
     name: jetson-stats
