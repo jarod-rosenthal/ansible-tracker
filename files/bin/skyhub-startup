@@ -10,7 +10,7 @@ jetson_clocks
 #We should call nvpmodel -m0 for the Nano and the Xavier AGX
 #for the xavier nx, we need to call nvpmodel -m2
 
-if [[ $JETSON_TYPE== *"NX"* ]]; then
+if [[ $JETSON_TYPE == *"NX"* ]]; then
 	nvpmodel -m2
 else
 	nvpmodel -m0
