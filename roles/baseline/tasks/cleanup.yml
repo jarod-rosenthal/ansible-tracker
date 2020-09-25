@@ -1,6 +1,5 @@
 - name: Cleanup old installations
   block:
-  ignore_errors: yes
   - name: Cleanup old installer files
     file:
       path: "{{ item }}"
@@ -44,3 +43,4 @@
   - name: Systemd reload
     systemd:
       daemon_reload: yes  
+  ignore_errors: yes
