@@ -6,7 +6,7 @@
   vars:
     existing_install: 'false'
     needs_cleanup: 'false'
-    storage_configure: 'false'
+    storage_configured: 'false'
     tracker_env: 'dev' 
     git_branch: 'develop'
     upload_server_addr: 'https://trackerd-upload-dev.skyhub.org'
