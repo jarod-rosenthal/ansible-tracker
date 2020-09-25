@@ -1,12 +1,12 @@
 - hostname:
     name: skyhub-tracker
 
-  - name: Initialize variables
-    set_fact: "{{ variable }}={{ value }}"
-    with_items:
-      - { variable: 'existing_install', value: 'false' }
-      - { variable: 'needs_cleanup', value: 'false' }
-      - { variable: 'storage_configured', value: 'false' }
+- name: Initialize variables
+  set_fact: "{{ variable }}={{ value }}"
+  with_items:
+    - { variable: 'existing_install', value: 'false' }
+    - { variable: 'needs_cleanup', value: 'false' }
+    - { variable: 'storage_configured', value: 'false' }
 
 # - name: Initialized needs_cleanup variable
 #   set_fact:
