@@ -237,7 +237,6 @@
     - snapd
     - whoopsie
     - wpa_supplicant
-    - skyhub-clocks
     - chrony # adding here to see if stop and staring will fix the gpsd
 
 - name: Enable services
