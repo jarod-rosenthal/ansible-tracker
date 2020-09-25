@@ -32,10 +32,12 @@ fi
 
 startSkyhub() {
     echo "Starting skyhub docker containers"
-    [ ! "$(sudo docker network ls | grep skyhub-network)" ] && sudo docker network create -d bridge --subnet 192.168.42.0/24 --gateway 192.168.42.1 skyhub-network
+
+    ehoc "Creating skyhub network"
+    [ ! "$(sudo docker network ls | grep skyhub-network$)" ] && sudo docker network create -d bridge --subnet 192.168.42.0/24 --gateway 192.168.42.1 skyhub-network
 
     echo "Starting mysql"
-    if [ ! "$(sudo docker ps | grep skyhub-mysql)" ]; then
+    if [ ! "$(sudo docker ps | grep skyhub-mysql$)" ]; then
         docker run -d --name skyhub-mysql \
             --mount type=bind,src=/skyhub/storage/mariadb,dst=/var/lib/mysql \
             --restart unless-stopped \
@@ -48,7 +50,7 @@ startSkyhub() {
     fi
 
     echo "Starting tracker-controller"
-    if [ ! "$(sudo docker ps | grep skyhub-tracker-controller)" ]; then
+    if [ ! "$(sudo docker ps | grep skyhub-tracker-controller$)" ]; then
         sudo docker run -d \
             --name skyhub-tracker-controller --network skyhub-network \
             --privileged --restart unless-stopped \
@@ -62,7 +64,7 @@ startSkyhub() {
     fi
 
     echo "Starting tracker"
-    if [ ! "$(sudo docker ps | grep skyhub-tracker)" ]; then
+    if [ ! "$(sudo docker ps | grep skyhub-tracker$)" ]; then
         sudo docker run -d \
             --runtime nvidia --name skyhub-tracker \
             --gpus all --network skyhub-network --privileged \
@@ -87,7 +89,7 @@ startSkyhub() {
     fi
 
     echo "Starting tracker-ui"
-    if [ ! "$(sudo docker ps | grep skyhub-tracker-ui)" ]; then
+    if [ ! "$(sudo docker ps | grep skyhub-tracker-ui$)" ]; then
         sudo docker run -d \
             --name skyhub-tracker-ui --network skyhub-network --privileged \
             -v /skyhub/storage/certs:/var/certs \
@@ -101,20 +103,20 @@ stopSkyhub() {
     echo "Stopping skyhub docker containers"
 
     echo  "Removing mysql"
-    [ "$(sudo docker ps -a | grep skyhub-mysql)" ] && sudo docker stop skyhub-mysql && sudo docker rm -f skyhub-mysql || true
+    [ "$(sudo docker ps -a | grep skyhub-mysql$)" ] && sudo docker stop skyhub-mysql && sudo docker rm -f skyhub-mysql || true
 
     echo "Removing tracker"
-    [ "$(sudo docker ps -a | grep skyhub-tracker)" ] && sudo docker rm -f skyhub-tracker || true
+    [ "$(sudo docker ps -a | grep skyhub-tracker$)" ] && sudo docker rm -f skyhub-tracker || true
 
     echo "Removing tracker-controller"
-    [ "$(sudo docker ps -a | grep skyhub-tracker-controller)" ] && sudo docker rm -f skyhub-tracker-controller || true
+    [ "$(sudo docker ps -a | grep skyhub-tracker-controller$)" ] && sudo docker rm -f skyhub-tracker-controller || true
 
     echo "Removing tracker-ui"
-    [ "$(sudo docker ps -a | grep skyhub-tracker-ui)" ] && sudo docker rm -f skyhub-tracker-ui || true
+    [ "$(sudo docker ps -a | grep skyhub-tracker-ui$)" ] && sudo docker rm -f skyhub-tracker-ui || true
 
     echo "Removing skyhub-network"
-    [ "$(sudo docker network ls | grep skyhub-network)" ] && sudo docker network rm skyhub-network || true
-    [ "$(sudo docker network ls | grep skyhub_skyhub-network)" ] && sudo docker network rm skyhub_skyhub-network || true
+    [ "$(sudo docker network ls | grep skyhub-network$)" ] && sudo docker network rm skyhub-network || true
+    [ "$(sudo docker network ls | grep skyhub_skyhub-network$)" ] && sudo docker network rm skyhub_skyhub-network || true
 
 }
 
