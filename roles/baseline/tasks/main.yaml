@@ -17,7 +17,7 @@
 - name: Initialized storage_configured variable
   set_fact:
     needs_cleanup: true
-#  when: needs_cleanup_result.stat.exists == true
+  when: needs_cleanup_result.stat.exists == true
 
 - name: Discover existing Sky Hub Storage
   set_fact:
