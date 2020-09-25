@@ -26,8 +26,12 @@ git clone -q https://gitlab.com/skyhuborg/ansible-tracker.git
 
 cd ansible-tracker
 git checkout $GITBRANCH
-cd ..
 
 ansible-playbook ansible-tracker/jetson.yaml
+
+cd ..
+rm ./ansible-tracker
+rm ./install
+
 #this is for when we go to production
 #ANSIBLE_STDOUT_CALLBACK=actionable sudo -E ansible-playbook ansible-tracker/jetson.yaml
