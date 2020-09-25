@@ -192,8 +192,10 @@
 
 - name: Configuring Sky Hub CLI
   template:
-    src: /templates/skyhub.j2
+    src: ./templates/skyhub.j2
     dest: /bin/skyhub
+    owner: skyhub
+    group: skyhub
     mode: '0555'
 
 - name: Configuring Docker with NVIDIA Runtime
