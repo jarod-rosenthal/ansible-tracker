@@ -1,6 +1,6 @@
 - name: GPSD Setup
   block:
-    - name: Disable gpsd
+    - name: Disable GPSD
       systemd:
         name: "{{ item }}"
         state: stopped
@@ -62,7 +62,7 @@
       loop:
         - refclock SHM  0 delay 0.5 refid GPS
 
-    - name: Enable services
+    - name: Enable GPSD
       systemd:
         name: "{{ item }}"
         state: restarted

@@ -131,6 +131,12 @@
     state: present
     line: "skyhub ALL=(ALL) NOPASSWD:/bin/skyhub"
 
+- name: Adding jetson-vars to /etc/profile
+  lineinfile:
+    path: /etc/profile
+    state: present
+    line: "source /bin/jetson-vars"
+
 - name: Create directories for Tracker
   file:
     path: "{{ item }}"
@@ -183,6 +189,7 @@
     - ./files/bin/skyhub-pipe
     - ./files/bin/skyhub-startup
     - ./files/bin/skyhub
+    - ./files/bin/jetson-vars
 
 - name: Configuring Docker with NVIDIA Runtime
   copy:
@@ -266,6 +273,9 @@
   include: cleanup.yml
   when: needs_cleanup == true
 
-- name: Stop Sky Hub containers if they are present
+- name: Source the platform vars
+  shell: "source jetson-vars"
+
+  - name: Stop Sky Hub containers if they are present
   shell: "skyhub start"
   when: existing_install == true
