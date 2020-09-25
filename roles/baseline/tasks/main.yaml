@@ -201,14 +201,6 @@
     - ./files/etc/systemd/system/skyhub-pipe.service
     - ./files/etc/systemd/system/skyhub-clocks.service
 
-- name: Installing clock service
-  copy:
-    src: "{{ item }}"
-    dest: /skyhub/
-    mode: u+rwx
-  loop:
-    - ./files/skyhub/clock.sh
-
 - name: Installing Sky Hub files
   copy:
     src: "{{ item }}"
@@ -295,3 +287,8 @@
   file:
     path: /skyhub/skyhub
     state: absent    
+
+- name: Cleanup old clock.sh
+  file:
+    path: /skyhub/clock.sh
+    state: absent
