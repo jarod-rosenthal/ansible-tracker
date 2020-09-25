@@ -191,9 +191,18 @@
   loop:
     - /skyhub
     - /skyhub/storage
-    - /skyhub/storage/mariadb
     - /skyhub/storage/certs
     - /skyhub/storage/docker
+
+- name: Create directories for Mysql
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: 1001
+    group: 1001
+    mode: 0660
+  loop:
+    - /skyhub/storage/mariadb
 
 - name: Configuring udev rules
   copy:
