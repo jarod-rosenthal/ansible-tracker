@@ -39,6 +39,7 @@
 - name: Install jmespath python package
   pip:
     name: jmespath
+    executable: pip3
 
 - name: Set timezone to UTC
   command: timedatectl set-timezone UTC    
@@ -96,7 +97,6 @@
     update_cache: yes
     pkg:
       - docker.io=19.03.6-0ubuntu1~18.04.1
-      - python-pip=9.0.1-2.3~ubuntu1.18.04.2
       - avahi-daemon=0.7-3.1ubuntu1.2
       - git=1:2.17.1-1ubuntu0.7
       - nvidia-container-csv-cuda=10.2.89-1
