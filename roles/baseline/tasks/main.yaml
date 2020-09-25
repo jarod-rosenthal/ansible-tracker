@@ -289,17 +289,11 @@
   loop:
     - bluedroid_pm
 
-- name: Cleanup old skyhub CLI
+- name: Cleanup old installer files
   file:
-    path: /skyhub/skyhub
-    state: absent    
-
-- name: Cleanup old clock.sh
-  file:
-    path: /skyhub/clock.sh
+    path: "{{ item }}"
     state: absent
-
-- name: Cleanup old installer
-  file:
-    path: /skyhub/install
-    state: absent    
+  loop: 
+    - /skyhub/install
+    - /skyhub/clock.sh
+    - /skyhub/skyhub
