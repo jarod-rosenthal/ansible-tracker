@@ -198,9 +198,9 @@
   file:
     path: "{{ item }}"
     state: directory
-    owner: 'root'
-    group: 'root'
-    mode: 0660
+    owner: 'skyhub'
+    group: 'skyhub'
+    mode: 0777
   loop:
     - /skyhub/storage/mariadb
 
