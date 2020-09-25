@@ -45,14 +45,14 @@
         - { insertbefore: 'EnvironmentFile=-/etc/sysconfig/gpsd', line: 'EnvironmentFile=-/etc/default/gpsd' }
         - { insertbefore: 'Also=gpsd.socket', line: 'WantedBy=multi-user.target' }
 
-    - name: Setting up GPSD Service file
-      lineinfile:
-        path: /lib/systemd/system/gpsd.service
-        regexp: '^ExecStart=/usr/sbin/gpsd $GPSD_OPTIONS $DEVICES'
-        line: ExecStart=/usr/sbin/gpsd -N $GPSD_OPTIONS $DEVICES    
-        owner: root
-        group: root
-        mode: '0644'
+    # - name: Setting up GPSD Service file
+    #   lineinfile:
+    #     path: /lib/systemd/system/gpsd.service
+    #     regexp: '^ExecStart=/usr/sbin/gpsd $GPSD_OPTIONS $DEVICES'
+    #     line: ExecStart=/usr/sbin/gpsd -N $GPSD_OPTIONS $DEVICES    
+    #     owner: root
+    #     group: root
+    #     mode: '0644'
 
     - name: Sync system time with GPS Receiver
       lineinfile:
