@@ -5,19 +5,19 @@
   set_fact:
     storage_configured: false
 
-- name: Initialized old_installation variable
+- name: Initialized needs_cleanup variable
   set_fact:
-    old_installation: false
+    needs_cleanup: false
 
 - name: Checking existing installation
   stat:
     path: /skyhub/skyhub
-  register: old_installation_result
+  register: needs_cleanup_result
 
 - name: Initialized storage_configured variable
   set_fact:
-    old_installation: true
-#  when: old_installation_result.stat.exists == true
+    needs_cleanup: true
+#  when: needs_cleanup_result.stat.exists == true
 
 - name: Discover existing Sky Hub Storage
   set_fact:
@@ -306,4 +306,4 @@
 
 - name: Include cleanup code for old installs
   include: cleanup.yml
-  when: old_installation == true
+  when: needs_cleanup == true
