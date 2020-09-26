@@ -176,15 +176,15 @@
   loop:
     - ./files/etc/systemd/system/skyhub-pipe.service
     - ./files/etc/systemd/system/skyhub-startup.service
-    - ./files/etc/systemd/system/skyhub-gpsd.service
+    # - ./files/etc/systemd/system/skyhub-gpsd.service
 
-- name: Installing socket service definitions
-  copy:
-    src: "{{ item }}"
-    dest: /lib/systemd/system/
-    mode: 644
-  loop:
-    - ./files/etc/systemd/socket/skyhub-gpsd.socket
+# - name: Installing socket service definitions
+#   copy:
+#     src: "{{ item }}"
+#     dest: /lib/systemd/system/
+#     mode: 644
+#   loop:
+#     - ./files/etc/systemd/socket/skyhub-gpsd.socket
 
 - name: Include gpsd modifications
   include: gpsd.yml
