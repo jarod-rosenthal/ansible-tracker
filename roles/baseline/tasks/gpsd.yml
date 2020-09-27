@@ -1,12 +1,24 @@
-- name: Generate Sky Hub certificates
-  shell: |
-    sudo docker run -d \
-        --name skyhub-gpsd --privileged --restart always --ipc=host \
-        --network skyhub-network ---log-opt max-size=10m \
-        skyhuborg/gpsd:latest -D2 /dev/$(readlink /dev/skyhub-gps)
-    exit 0
-  args:
-    executable: /bin/bash
+#- name: Generate Sky Hub certificates
+#  shell: |
+#    sudo docker run -d \
+#        --name skyhub-gpsd --privileged --restart always --ipc=host \
+#        --network skyhub-network ---log-opt max-size=10m \
+#        skyhuborg/gpsd:latest -D2 /dev/$(readlink /dev/skyhub-gps)
+#    exit 0
+#  args:
+#    executable: /bin/bash
+
+- name: Setup GPSD container
+  community.general.docker_container:
+    name: skyhub-gpsd
+    image: skyhuborg/gpsd:latest
+    state: started
+    restart: no
+    restart_policy: always
+    privilged: yes
+    ipc_mode: host
+    command: -D2 /dev/$(readlink /dev/skyhub-gps)
+
 
 # - name: Disable GPSD
 #   systemd:
