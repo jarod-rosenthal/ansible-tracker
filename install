@@ -30,7 +30,7 @@ esac
 
 echo "Installing ansible, this step may take a while."
 apt-get -qq update 
-apt-get install -qq -y git python3-pip
+apt-get install -qq -y git python3-pip python-pip
 
 pip3 -q install ansible
 
