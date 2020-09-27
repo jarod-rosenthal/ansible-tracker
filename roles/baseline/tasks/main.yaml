@@ -136,11 +136,10 @@
     state: present
     line: "skyhub ALL=(ALL) NOPASSWD:/bin/skyhub"
 
-- name: Adding jetson-vars to /etc/profile
-  lineinfile:
-    path: /etc/profile
-    state: present
-    line: "source /bin/jetson-vars"
+- name: Adding jetson-vars to /etc/profile.d
+  copy:
+    src: ./files/etc/profile.d/jetson-vars.sh
+    dest: /etc/profile.d/jetson-vars.sh
 
 - name: Create directories for Tracker
   file:

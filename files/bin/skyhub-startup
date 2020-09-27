@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source /bin/jetson_vars
+. /etc/profile.d/jetson_vars.sh
 
 sleep 6
 
