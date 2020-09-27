@@ -43,6 +43,7 @@
   loop:
     - jmespath
     - jetson-stats
+    - docker
 
 - name: Set timezone to UTC
   command: timedatectl set-timezone UTC    
