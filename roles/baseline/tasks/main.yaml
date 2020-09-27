@@ -204,7 +204,6 @@
   loop:
     - ./files/bin/skyhub-pipe
     - ./files/bin/skyhub-startup
-    - ./files/bin/jetson-vars
 
 - name: Configuring Sky Hub CLI
   template:
