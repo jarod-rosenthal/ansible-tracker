@@ -203,7 +203,7 @@ elif [ "$1" = "restart" ]; then
 elif [ "$1" = "update" ]; then
     updateSkyHub
 elif [ "$1" = "upgrade" ]; then
-    bash -c 'sudo wget --no-cache "https://gitlab.com/skyhuborg/ansible-tracker/-/raw/master/install" -O "install" -o /dev/null && sudo chmod u+x ./install && sudo bash -c "source ./install"'
+    bash -c 'sudo wget --no-cache "https://gitlab.com/skyhuborg/ansible-tracker/-/raw/{{ git_branch }}/install" -O "install" -o /dev/null && sudo chmod u+x ./install && sudo bash -c "source ./install {{ tracker_env }}"'
 # elif [ "$1" = "reset" ]; then    
 #     resetSkyHub
 elif [ "$1" = "resetdb" ]; then    
