@@ -74,7 +74,7 @@ startSkyhub() {
             --env device-path-witmotion=/dev/$(readlink /dev/hwt901b) \
             --env profile:0 \
             --env controller-trackerd-server-addr=skyhub-tracker-controller:8089 \
-            --env gpsd-addr=192.168.42.1:2947 \
+            --env gpsd-addr=skyhub-gpsd:2947 \
             --env upload-server-addr={{ upload_server_addr }} \
             --env trackerd-server-addr={{ trackerd_server_addr }} \
             --env auto-tls-server-name={{ trackerd_auto_tls_name }} \
