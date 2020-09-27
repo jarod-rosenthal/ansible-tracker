@@ -12,6 +12,10 @@
   shell: echo /dev/$(readlink /dev/skyhub-gps)
   register: gps_device
 
+- name: Create Sky Hub Network
+  community.general.docker_network:
+    name: skyhub-network
+
 - name: Setup GPSD container
   community.general.docker_container:
     name: skyhub-gpsd
