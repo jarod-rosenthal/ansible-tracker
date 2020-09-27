@@ -45,6 +45,13 @@
     - jetson-stats
     - docker
 
+- name: Install docker
+  pip:
+    name: "{{ item }}"
+    executable: pip
+  loop:
+    - docker
+
 - name: Set timezone to UTC
   command: timedatectl set-timezone UTC    
   when: ansible_date_time.tz != 'UTC'
