@@ -16,7 +16,7 @@
   community.general.docker_container:
     name: skyhub-gpsd
     image: skyhuborg/gpsd:latest
-    network: skyhub-network
+    network_mode: skyhub-network
     state: started
     restart: no
     restart_policy: always
