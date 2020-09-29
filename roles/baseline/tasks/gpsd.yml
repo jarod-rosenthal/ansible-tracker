@@ -40,13 +40,13 @@
 #     - skyhub-gpsd.socket
 #   ignore_errors: true
   
-# - name: Sync system time with GPS Receiver
-#   lineinfile:
-#     path: /etc/chrony/chrony.conf
-#     state: present
-#     line: "{{ item }}"
-#   loop:
-#     - refclock SHM  0 delay 0.5 refid GPS
+- name: Sync system time with GPS Receiver
+  lineinfile:
+    path: /etc/chrony/chrony.conf
+    state: present
+    line: "{{ item }}"
+  loop:
+    - refclock SHM  0 delay 0.5 refid GPS
 
 # - name: Enable GPSD
 #   systemd:
