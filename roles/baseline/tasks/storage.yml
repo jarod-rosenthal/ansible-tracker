@@ -1,3 +1,7 @@
+### Notes: we need to fix the following logics
+# 1. We should always check that the disk is mounted
+# 2. We should have an option to force a reformat
+
 - name: Create list of mounted devices
   set_fact:
     mounted_devices: "{{ ansible_mounts|json_query('[].device') }}"

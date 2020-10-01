@@ -1,6 +1,0 @@
----
-- name: Apply baseline configuration for tracker.
-  hosts: all
-  connection: local
-  roles:
-    - baseline

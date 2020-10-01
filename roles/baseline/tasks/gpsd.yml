@@ -1,54 +1,60 @@
+#- name: Generate Sky Hub certificates
+#  shell: |
+#    sudo docker run -d \
+#        --name skyhub-gpsd --privileged --restart always --ipc=host \
+#        --network skyhub-network ---log-opt max-size=10m \
+#        skyhuborg/gpsd:latest -D2 /dev/$(readlink /dev/skyhub-gps)
+#    exit 0
+#  args:
+#    executable: /bin/bash
 
-- name: GPSD Setup
-  block:
-    - name: Setting up GPSD Service
-      lineinfile:
-        path: /etc/default/gpsd
-        regexp: '^GPSD_OPTIONS=""'
-        line: GPSD_OPTIONS="-n -G"
-        owner: root
-        group: root
-        mode: '0644'
+- name: Find GPS Device path
+  shell: echo /dev/$(readlink /dev/skyhub-gps)
+  register: gps_device
 
-    - name: Setting up GPSD Listen ports
-      lineinfile:
-        path: /lib/systemd/system/gpsd.socket
-        regexp: '^ListenStream=127.0.0.1:2947'
-        line: ListenStream=0.0.0.0:2947    
-        owner: root
-        group: root
-        mode: '0644'
+- name: Create Sky Hub Network
+  community.general.docker_network:
+    name: skyhub-network
 
-    - name: Setting up GPSD Listen ports
-      lineinfile:
-        path: /lib/systemd/system/gpsd.socket
-        insertbefore: 'ListenStream=/var/run/gpsd.sock'
-        line: ListenStream=
-        state: present
+- name: Setup GPSD container
+  community.general.docker_container:
+    name: skyhub-gpsd
+    image: skyhuborg/gpsd:latest
+    network_mode: skyhub-network
+    state: started
+    restart: no
+    restart_policy: always
+    privileged: yes
+    ipc_mode: host
+    command: -D2 {{ gps_device.stdout }}
 
-    - name: Setting up GPSD Service file
-      lineinfile:
-        dest: /lib/systemd/system/gpsd.service
-        insertbefore: "{{ item.insertbefore }}"
-        line: "{{ item.line }}"
-        state: present
-      with_items:
-        - { insertbefore: 'EnvironmentFile=-/etc/sysconfig/gpsd', line: 'EnvironmentFile=-/etc/default/gpsd' }
-        - { insertbefore: 'Also=gpsd.socket', line: 'WantedBy=multi-user.target' }
 
-    - name: Setting up GPSD Service file
-      lineinfile:
-        path: /lib/systemd/system/gpsd.service
-        regexp: '^ExecStart=/usr/sbin/gpsd $GPSD_OPTIONS $DEVICES'
-        line: ExecStart=/usr/sbin/gpsd -N $GPSD_OPTIONS $DEVICES    
-        owner: root
-        group: root
-        mode: '0644'
+# - name: Disable GPSD
+#   systemd:
+#     name: "{{ item }}"
+#     state: stopped
+#     enabled: no
+#   become: true
+#   loop: 
+#     - skyhub-gpsd.service
+#     - skyhub-gpsd.socket
+#   ignore_errors: true
+  
+- name: Sync system time with GPS Receiver
+  lineinfile:
+    path: /etc/chrony/chrony.conf
+    state: present
+    line: "{{ item }}"
+  loop:
+    - refclock SHM  0 delay 0.5 refid GPS
 
-    - name: Sync system time with GPS Receiver
-      lineinfile:
-        path: /etc/chrony/chrony.conf
-        state: present
-        line: "{{ item }}"
-      loop:
-        - refclock SHM  0 delay 0.5 refid GPS
+# - name: Enable GPSD
+#   systemd:
+#     name: "{{ item }}"
+#     state: restarted
+#     enabled: yes
+#     daemon_reload: yes
+#   become: true
+#   loop:
+#     - skyhub-gpsd.service
+#     - skyhub-gpsd.socket

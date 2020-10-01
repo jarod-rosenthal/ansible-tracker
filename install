@@ -1,19 +1,38 @@
 #!/bin/bash
 
 echo "Initializing the Sky Hub Installer..."
+GITBRANCH=master
+TRACKERENV=prod
+case $1 in
 
-if [ -z "$1" ]; then
-  echo "Running on master branch"
-  GITBRANCH=master
-else
-  echo "Running on $1 branch"
-  GITBRANCH=$1
-fi
+  dev)
+    echo "Running dev environment"
+    GITBRANCH=develop
+    TRACKERENV=dev
+    ;;
 
+  test)
+    echo "Running test environment"
+    GITBRANCH=test
+    TRACKERENV=test
+    ;;
+
+  staging)
+    echo "Running staging / prod environment"
+    GITBRANCH=develop
+    TRACKERENV=prod
+    ;;
+
+  *)
+    echo "Running prod environment"
+    ;;
+esac
+
+echo "Installing ansible, this step may take a while."
 apt-get -qq update 
-apt-get install -qq -y git
+apt-get install -qq -y git python3-pip python-pip
 
-pip -q install ansible
+pip3 -q install ansible
 
 ansible-galaxy collection install ansible.posix -p ~/.ansible/collections
 ansible-galaxy collection install community.general -p ~/.ansible/collections
@@ -27,8 +46,7 @@ git clone -q https://gitlab.com/skyhuborg/ansible-tracker.git
 cd ansible-tracker
 git checkout $GITBRANCH
 
-ansible-playbook jetson.yaml
-#ANSIBLE_STDOUT_CALLBACK=actionable sudo -E ansible-playbook ansible-tracker/jetson.yaml
+ANSIBLE_STDOUT_CALLBACK=actionable ansible-playbook $TRACKERENV.yml
 
 cd ..
 rm -r ./ansible-tracker

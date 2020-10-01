@@ -1,11 +1,24 @@
 #!/bin/bash
-# Maximize performance on the Jetson
+
+. /etc/profile.d/jetson_vars.sh
 
 sleep 6
 
+# Maximize performance on the Jetson
 jetson_clocks
 
+#We should call nvpmodel -m0 for the Nano and the Xavier AGX
+#for the xavier nx, we need to call nvpmodel -m2
+
+if [[ $JETSON_TYPE == *"NX"* ]]; then
+	nvpmodel -m2
+else
+	nvpmodel -m0
+fi
+
+# Make sure docker cotnainers are started (for some reason this works)
 docker ps
+
 
 exit 0
 

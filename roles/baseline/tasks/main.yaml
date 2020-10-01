@@ -1,23 +1,65 @@
 - hostname:
     name: skyhub-tracker
 
-- name: Initialized storage_configured variable
-  set_fact:
-    storage_configured: false
+# - name: Initialized existing_install variable
+#   set_fact:
+#     existing_install: false
 
-- name: Initialized needs_cleanup variable
-  set_fact:
-    needs_cleanup: false
+# - name: Initialized needs_cleanup variable
+#   set_fact:
+#     needs_cleanup: false
 
-- name: Checking existing installation
+# - name: Initialized storage_configured variable
+#   set_fact:
+#     storage_configured: false
+
+- name: Is skyhub in the path
+  shell: "which skyhub"
+  register: skyhub_inpath_result
+  ignore_errors: true
+
+# - name: Print skyhub_inpath_result
+#   debug:
+#     var: skyhub_inpath_result
+
+- name: Initialize existing_install
+  set_fact: 
+    existing_install: true
+  when: skyhub_inpath_result.stdout != ""
+
+- name: Checking old installation
   stat:
     path: /skyhub/skyhub
-  register: needs_cleanup_result
+  register: old_skyhub_result
+
+- name: Stop Sky Hub containers if they are present
+  shell: "skyhub stop"
+  when: existing_install == true
+
+- name: Install jmespath python package
+  pip:
+    name: "{{ item }}"
+    executable: pip3
+  loop:
+    - jmespath
+    - jetson-stats
+    - docker
+
+- name: Install docker
+  pip:
+    name: "{{ item }}"
+    executable: pip
+  loop:
+    - docker
+
+- name: Set timezone to UTC
+  command: timedatectl set-timezone UTC    
+  when: ansible_date_time.tz != 'UTC'
 
 - name: Initialized storage_configured variable
   set_fact:
     needs_cleanup: true
-  when: needs_cleanup_result.stat.exists == true
+  when: old_skyhub_result.stat.exists == true
 
 - name: Discover existing Sky Hub Storage
   set_fact:
@@ -33,10 +75,6 @@
    - item.key is search ("sd") or item.key is search("nvme")
    - storage_configured != true
   with_dict: "{{ ansible_devices }}"
-
-- name: Install jmespath python package
-  pip:
-    name: jmespath
 
 - name: Storage disk initialization confirmation
   pause:
@@ -70,7 +108,6 @@
     update_cache: yes
     pkg:
       - docker.io=19.03.6-0ubuntu1~18.04.1
-      - python-pip=9.0.1-2.3~ubuntu1.18.04.2
       - avahi-daemon=0.7-3.1ubuntu1.2
       - git=1:2.17.1-1ubuntu0.7
       - nvidia-container-csv-cuda=10.2.89-1
@@ -78,15 +115,9 @@
       - nvidia-container-csv-tensorrt=7.1.3.0-1+cuda10.2
       - nvidia-container-csv-visionworks=1.6.0.501
       - deepstream-5.0=5.0.0-1
-      - gpsd
       - gpsd-clients
       - chrony
-
-- name: Include gpsd modifications
-  include: gpsd.yml
-
-- pip:
-    name: jetson-stats
+      - htop
 
 - name: Creating Sky Hub User
   user:
@@ -104,6 +135,11 @@
     path: /etc/sudoers
     state: present
     line: "skyhub ALL=(ALL) NOPASSWD:/bin/skyhub"
+
+- name: Adding jetson-vars to /etc/profile.d
+  copy:
+    src: ./files/etc/profile.d/jetson-vars.sh
+    dest: /etc/profile.d/jetson-vars.sh
 
 - name: Create directories for Tracker
   file:
@@ -147,6 +183,18 @@
   loop:
     - ./files/etc/systemd/system/skyhub-pipe.service
     - ./files/etc/systemd/system/skyhub-startup.service
+    # - ./files/etc/systemd/system/skyhub-gpsd.service
+
+# - name: Installing socket service definitions
+#   copy:
+#     src: "{{ item }}"
+#     dest: /lib/systemd/system/
+#     mode: 644
+#   loop:
+#     - ./files/etc/systemd/socket/skyhub-gpsd.socket
+
+- name: Include gpsd modifications
+  include: gpsd.yml
 
 - name: Installing Sky Hub files
   copy:
@@ -156,7 +204,14 @@
   loop:
     - ./files/bin/skyhub-pipe
     - ./files/bin/skyhub-startup
-    - ./files/bin/skyhub
+
+- name: Configuring Sky Hub CLI
+  template:
+    src: ./templates/skyhub.j2
+    dest: /bin/skyhub
+    owner: skyhub
+    group: skyhub
+    mode: '0555'
 
 - name: Configuring Docker with NVIDIA Runtime
   copy:
@@ -189,7 +244,6 @@
     daemon_reload: yes
   become: true
   loop:
-    - gpsd
     - chrony
     - avahi-daemon
     - ssh
@@ -240,3 +294,7 @@
 - name: Include cleanup code for old installs
   include: cleanup.yml
   when: needs_cleanup == true
+
+- name: Start Sky Hub containers
+  shell: "skyhub start"
+  when: existing_install == true

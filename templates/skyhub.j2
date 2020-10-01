@@ -1,5 +1,5 @@
 #!/bin/bash
-
+source /etc/profile.d/jetson-vars.sh
 
 showUsage() {
     echo " "
@@ -60,7 +60,7 @@ startSkyhub() {
             -v /skyhub/storage/certs:/var/certs \
             -p 8080:8080 -p 9090:8088 -p 3000:3000 \
             --log-opt max-size=10m --log-opt max-file=5 \
-            skyhuborg/tracker-controller:develop
+            skyhuborg/tracker-controller:{{ git_branch }}
     fi
 
     echo "Starting tracker"
@@ -75,9 +75,9 @@ startSkyhub() {
             --env profile:0 \
             --env controller-trackerd-server-addr=skyhub-tracker-controller:8089 \
             --env gpsd-addr=skyhub-gpsd:2947 \
-            --env upload-server-addr=https://trackerd-upload-dev.skyhub.org \
-            --env trackerd-server-addr=trackerd-dev.skyhub.org:8088 \
-            --env auto-tls-server-name=trackerd-dev.skyhub.org \
+            --env upload-server-addr={{ upload_server_addr }} \
+            --env trackerd-server-addr={{ trackerd_server_addr }} \
+            --env auto-tls-server-name={{ trackerd_auto_tls_name }} \
             --env auto-tls=true \
             --env dnn-model-path=/skyhub/models \
             --env JETSON_MODULE=${JETSON_MODULE} \
@@ -85,7 +85,7 @@ startSkyhub() {
             -v /skyhub/storage/data:/skyhub/data -v /skyhub/storage/etc:/skyhub/etc \
             -v /skyhub/skyhub.pipe:/tmp/skyhub.pipe -v /skyhub/storage/certs:/var/certs \
             --log-opt max-size=10m --log-opt max-file=5 \
-            skyhuborg/tracker:develop
+            skyhuborg/tracker:{{ git_branch }}
     fi
 
     echo "Starting tracker-ui"
@@ -95,7 +95,7 @@ startSkyhub() {
             -v /skyhub/storage/certs:/var/certs \
             --restart unless-stopped -p 80:80 -p 443:443 \
             --log-opt max-size=10m --log-opt max-file=5 \
-            skyhuborg/tracker-ui:develop
+            skyhuborg/tracker-ui:{{ git_branch }}
     fi
 }
 
@@ -167,13 +167,13 @@ updateSkyHub() {
     stopSkyhub
 
     echo "Updating tracker"
-    docker pull skyhuborg/tracker:develop
+    docker pull skyhuborg/tracker:{{ git_branch }}
 
     echo "Updating tracker-controller"
-    docker pull skyhuborg/tracker-controller:develop
+    docker pull skyhuborg/tracker-controller:{{ git_branch }}
 
     echo "Updating tracker-ui"
-    docker pull skyhuborg/tracker-ui:develop
+    docker pull skyhuborg/tracker-ui:{{ git_branch }}
 
     startSkyhub
 
@@ -203,7 +203,7 @@ elif [ "$1" = "restart" ]; then
 elif [ "$1" = "update" ]; then
     updateSkyHub
 elif [ "$1" = "upgrade" ]; then
-    bash -c 'sudo wget --no-cache "https://gitlab.com/skyhuborg/ansible-tracker/-/raw/master/install" -O "install" -o /dev/null && sudo chmod u+x ./install && sudo bash -c "source ./install"'
+    bash -c 'sudo wget --no-cache "https://gitlab.com/skyhuborg/ansible-tracker/-/raw/{{ git_branch }}/install" -O "install" -o /dev/null && sudo chmod u+x ./install && sudo bash -c "source ./install {{ tracker_env }}"'
 # elif [ "$1" = "reset" ]; then    
 #     resetSkyHub
 elif [ "$1" = "resetdb" ]; then    
