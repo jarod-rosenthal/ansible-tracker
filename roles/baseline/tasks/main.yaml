@@ -193,9 +193,6 @@
 #   loop:
 #     - ./files/etc/systemd/socket/skyhub-gpsd.socket
 
-- name: Include gpsd modifications
-  include: gpsd.yml
-
 - name: Installing Sky Hub files
   copy:
     src: "{{ item }}"
@@ -250,6 +247,9 @@
     - docker
     - skyhub-pipe
     - skyhub-startup
+
+- name: Include gpsd modifications
+  include: gpsd.yml
 
 - name: get default runlevel
   command: systemctl get-default
