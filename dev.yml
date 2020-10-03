@@ -4,7 +4,7 @@
   roles:
     - baseline
   vars:
-	docker_tag: 'develop'
+    docker_tag: 'develop'
     existing_install: 'false'
     needs_cleanup: 'false'
     storage_configured: 'false'
