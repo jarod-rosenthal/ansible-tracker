@@ -4,6 +4,7 @@
   roles:
     - baseline
   vars:
+    docker_tag: 'latest'
     existing_install: 'false'
     needs_cleanup: 'false'
     storage_configured: 'false'
