@@ -58,6 +58,7 @@ startSkyhub() {
             -v /skyhub/storage/data:/skyhub/data -v /skyhub/storage/etc:/skyhub/etc \
             -v /skyhub/storage/db:/skyhub/db -v /skyhub/skyhub.pipe:/tmp/skyhub.pipe \
             -v /skyhub/storage/certs:/var/certs \
+            -v /var/run/docker.sock:/var/run/docker.sock \
             -p 8080:8080 -p 9090:8088 -p 3000:3000 \
             --log-opt max-size=10m --log-opt max-file=5 \
             skyhuborg/tracker-controller:{{ git_branch }}

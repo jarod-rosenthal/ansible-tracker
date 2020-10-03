@@ -118,6 +118,7 @@
       - gpsd-clients
       - chrony
       - htop
+      - nano
 
 - name: Creating Sky Hub User
   user:
