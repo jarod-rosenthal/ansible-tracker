@@ -233,7 +233,8 @@
     - snapd
     - whoopsie
     - wpa_supplicant
-    - chrony # adding here to see if stop and staring will fix the gpsd
+    - chrony
+    - udisks2
 
 - name: Enable services
   systemd:
