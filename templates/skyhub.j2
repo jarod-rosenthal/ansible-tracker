@@ -60,7 +60,7 @@ startSkyhub() {
             -v /skyhub/storage/certs:/var/certs \
             -p 8080:8080 -p 9090:8088 -p 3000:3000 \
             --log-opt max-size=10m --log-opt max-file=5 \
-            skyhuborg/tracker-controller:{{ git_branch }}
+            skyhuborg/tracker-controller:{{ docker_tag }}
     fi
 
     echo "Starting tracker"
@@ -85,7 +85,7 @@ startSkyhub() {
             -v /skyhub/storage/data:/skyhub/data -v /skyhub/storage/etc:/skyhub/etc \
             -v /skyhub/skyhub.pipe:/tmp/skyhub.pipe -v /skyhub/storage/certs:/var/certs \
             --log-opt max-size=10m --log-opt max-file=5 \
-            skyhuborg/tracker:{{ git_branch }}
+            skyhuborg/tracker:{{ docker_tag }}
     fi
 
     echo "Starting tracker-ui"
@@ -95,7 +95,7 @@ startSkyhub() {
             -v /skyhub/storage/certs:/var/certs \
             --restart unless-stopped -p 80:80 -p 443:443 \
             --log-opt max-size=10m --log-opt max-file=5 \
-            skyhuborg/tracker-ui:{{ git_branch }}
+            skyhuborg/tracker-ui:{{ docker_tag }}
     fi
 }
 
@@ -167,13 +167,13 @@ updateSkyHub() {
     stopSkyhub
 
     echo "Updating tracker"
-    docker pull skyhuborg/tracker:{{ git_branch }}
+    docker pull skyhuborg/tracker:{{ docker_tag }}
 
     echo "Updating tracker-controller"
-    docker pull skyhuborg/tracker-controller:{{ git_branch }}
+    docker pull skyhuborg/tracker-controller:{{ docker_tag }}
 
     echo "Updating tracker-ui"
-    docker pull skyhuborg/tracker-ui:{{ git_branch }}
+    docker pull skyhuborg/tracker-ui:{{ docker_tag }}
 
     startSkyhub
 
@@ -203,7 +203,7 @@ elif [ "$1" = "restart" ]; then
 elif [ "$1" = "update" ]; then
     updateSkyHub
 elif [ "$1" = "upgrade" ]; then
-    bash -c 'sudo wget --no-cache "https://gitlab.com/skyhuborg/ansible-tracker/-/raw/{{ git_branch }}/install" -O "install" -o /dev/null && sudo chmod u+x ./install && sudo bash -c "source ./install {{ tracker_env }}"'
+    bash -c 'sudo wget --no-cache "https://gitlab.com/skyhuborg/ansible-tracker/-/raw/{{ docker_tag }}/install" -O "install" -o /dev/null && sudo chmod u+x ./install && sudo bash -c "source ./install {{ tracker_env }}"'
 # elif [ "$1" = "reset" ]; then    
 #     resetSkyHub
 elif [ "$1" = "resetdb" ]; then    
