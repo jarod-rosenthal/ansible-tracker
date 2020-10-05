@@ -66,7 +66,6 @@
 - name: Reloading udev rules
   shell:
     cmd: udevadm control --reload-rules && udevadm trigger
-- name udevadm control --reload-rules && udevadm trigger
 
 - name: Initialized storage_configured variable
   set_fact:
