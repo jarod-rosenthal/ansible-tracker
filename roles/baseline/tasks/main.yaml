@@ -67,6 +67,15 @@
   shell:
     cmd: udevadm control --reload-rules && udevadm trigger
 
+- name: Disable udisks2 service
+  systemd:
+    name: "{{ item }}"
+    state: stopped
+    enabled: no
+  become: true
+  loop: 
+    - udisks2    
+
 - name: Initialized storage_configured variable
   set_fact:
     needs_cleanup: true
@@ -245,7 +254,6 @@
     - whoopsie
     - wpa_supplicant
     - chrony
-    - udisks2
 
 - name: Enable services
   systemd:

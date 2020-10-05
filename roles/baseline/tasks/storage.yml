@@ -21,7 +21,23 @@
   ansible.posix.mount:
     path: '{{ storage_mount }}'
     state: unmounted
-  when: storage_disk in mounted_devices    
+  when: storage_disk in mounted_devices
+
+- name: Update list of mounted devices
+  set_fact:
+    mounted_devices: "{{ ansible_mounts|json_query('[].device') }}"
+
+- name: Update mounted path for {{ storage_disk }}
+  set_fact:
+    storage_mount: "{{ item.mount }}"
+  with_items: "{{ ansible_mounts }}"
+  when: item.device == storage_disk
+
+- name: Unmount again if the auto mount picked it up
+  ansible.posix.mount:
+    path: '{{ storage_mount }}'
+    state: unmounted
+  when: storage_disk in mounted_devices
 
 - name: Loading attached storage device information
   community.general.parted: device={{ storage_disk }} unit=MiB
