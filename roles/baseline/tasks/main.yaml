@@ -162,10 +162,10 @@
     src: ./files/etc/profile.d/jetson-vars.sh
     dest: /etc/profile.d/jetson-vars.sh
 
-- name: Adding skyhub-jobs to cron daily
+- name: Adding skyhub-jobs to cron weekly
   copy:
-    src: ./files/etc/chron.daily/skyhub-jobs.sh
-    dest: /etc/chron.daily/skyhub-jobs.sh
+    src: ./files/etc/cron.daily/skyhub-jobs.sh
+    dest: /etc/cron.weekly/skyhub-jobs.sh
 
 - name: Create directories for Tracker
   file:
