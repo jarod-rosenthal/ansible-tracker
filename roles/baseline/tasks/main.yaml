@@ -164,7 +164,8 @@
 
 - name: Adding skyhub-jobs to cron weekly
   copy:
-    src: ./files/etc/cron.daily/skyhub-jobs.sh
+    mode: 0777
+    src: ./files/etc/cron.weekly/skyhub-jobs.sh
     dest: /etc/cron.weekly/skyhub-jobs.sh
 
 - name: Create directories for Tracker
