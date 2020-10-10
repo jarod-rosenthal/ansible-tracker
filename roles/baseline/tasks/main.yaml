@@ -162,6 +162,11 @@
     src: ./files/etc/profile.d/jetson-vars.sh
     dest: /etc/profile.d/jetson-vars.sh
 
+- name: Adding skyhub-jobs to cron daily
+  copy:
+    src: ./files/etc/chron.daily/skyhub-jobs.sh
+    dest: /etc/chron.daily/
+
 - name: Create directories for Tracker
   file:
     path: "{{ item }}"
