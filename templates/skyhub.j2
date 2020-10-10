@@ -14,6 +14,7 @@ showUsage() {
     echo "      restart       - Stop and restarts the tracker"
     echo "      update        - Update the tracker docker images and containers"
     echo "      upgrade       - Reruns the skyhub installer"
+    echo "      purge         - Removes excess storage"
     echo "      status        - Lists the running containers"
     echo "      monitor       - Monitors the skyhub-tracker logs"
     echo "      mysql         - Opens a connection to mysql"
@@ -203,6 +204,8 @@ elif [ "$1" = "restart" ]; then
     startSkyhub
 elif [ "$1" = "update" ]; then
     updateSkyHub
+elif [ "$1" = "purge" ]; then
+    echo "Command not implemented yet"
 elif [ "$1" = "upgrade" ]; then
     bash -c 'sudo wget --no-cache "https://gitlab.com/skyhuborg/ansible-tracker/-/raw/{{ docker_tag }}/install" -O "install" -o /dev/null && sudo chmod u+x ./install && sudo bash -c "source ./install {{ tracker_env }}"'
 # elif [ "$1" = "reset" ]; then    
