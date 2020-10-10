@@ -165,7 +165,7 @@
 - name: Adding skyhub-jobs to cron daily
   copy:
     src: ./files/etc/chron.daily/skyhub-jobs.sh
-    dest: /etc/chron.daily/
+    dest: /etc/chron.daily/skyhub-jobs.sh
 
 - name: Create directories for Tracker
   file:
