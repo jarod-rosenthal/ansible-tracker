@@ -104,8 +104,8 @@ startSkyhub() {
 stopSkyhub() {
     echo "Stopping skyhub docker containers"
 
-    echo  "Removing mysql"
-    [ "$(sudo docker ps -a | grep skyhub-mysql$)" ] && sudo docker stop skyhub-mysql && sudo docker rm -f skyhub-mysql || true
+    #echo  "Removing mysql"
+    #[ "$(sudo docker ps -a | grep skyhub-mysql$)" ] && sudo docker stop skyhub-mysql && sudo docker rm -f skyhub-mysql || true
 
     echo "Removing tracker"
     [ "$(sudo docker ps -a | grep skyhub-tracker$)" ] && sudo docker rm -f skyhub-tracker || true
@@ -116,9 +116,9 @@ stopSkyhub() {
     echo "Removing tracker-ui"
     [ "$(sudo docker ps -a | grep skyhub-tracker-ui$)" ] && sudo docker rm -f skyhub-tracker-ui || true
 
-    echo "Removing skyhub-network"
-    [ "$(sudo docker network ls | grep skyhub_skyhub-network)" ] && sudo docker network rm skyhub_skyhub-network || true
-    [ "$(sudo docker network ls | grep skyhub-network)" ] && sudo docker network rm skyhub-network || true
+    #echo "Removing skyhub-network"
+    #[ "$(sudo docker network ls | grep skyhub_skyhub-network)" ] && sudo docker network rm skyhub_skyhub-network || true
+    #[ "$(sudo docker network ls | grep skyhub-network)" ] && sudo docker network rm skyhub-network || true
 
 }
 
