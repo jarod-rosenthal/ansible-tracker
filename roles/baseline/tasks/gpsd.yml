@@ -26,8 +26,10 @@
     restart_policy: always
     privileged: yes
     ipc_mode: host
-    command: -D2 {{ gps_device.stdout }}
-
+    command: {{ gps_device.stdout }}
+    log_options:
+      max-size: 1m
+      max-file: 1
 
 # - name: Disable GPSD
 #   systemd:
