@@ -26,7 +26,7 @@
     restart_policy: always
     privileged: yes
     ipc_mode: host
-    command: "{{ gps_device.stdout }}"
+    command: -D0 {{ gps_device.stdout }}
     log_driver: json-file
     log_options:
       max-size: 1m
