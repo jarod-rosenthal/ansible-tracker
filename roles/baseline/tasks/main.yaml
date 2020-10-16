@@ -325,3 +325,4 @@
 
 - name: Start Sky Hub containers
   shell: "skyhub start"
+  ignore_errors: true
