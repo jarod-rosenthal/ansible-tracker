@@ -49,7 +49,8 @@ git checkout $GITBRANCH
 if [ $TRACKERENV = "dev" ]; then
   ansible-playbook $TRACKERENV.yml
 else
-  ANSIBLE_STDOUT_CALLBACK=actionable ansible-playbook $TRACKERENV.yml
+  #ANSIBLE_STDOUT_CALLBACK=actionable ansible-playbook $TRACKERENV.yml
+  ansible-playbook $TRACKERENV.yml
 fi
 
 cd ..
