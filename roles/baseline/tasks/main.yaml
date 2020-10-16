@@ -319,6 +319,13 @@
   loop:
     - bluedroid_pm
 
+- name: Install Sky Hub Update Service
+  cron:
+    name: "skyhub update"
+    minute: "0"
+    hour: "8"
+    job: "/bin/skyhub update"
+
 - name: Include cleanup code for old installs
   include: cleanup.yml
   when: needs_cleanup == true
