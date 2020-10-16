@@ -325,4 +325,3 @@
 
 - name: Start Sky Hub containers
   shell: "skyhub start"
-  when: existing_install == true
