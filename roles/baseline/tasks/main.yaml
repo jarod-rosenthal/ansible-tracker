@@ -297,7 +297,7 @@
 
 - name: Stat service.pem cert
   stat:
-    path: /skyhub/storage/certs/service.pem
+    path: /skyhub/storage/certs/service.crt
   register: cert_result
 
 - name: Generate Sky Hub certificates
