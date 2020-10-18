@@ -302,11 +302,22 @@
 
 - name: Generate Sky Hub certificates
   shell: |
-    openssl genrsa -out /skyhub/storage/certs/ca.key 4096
-    openssl req -new -x509 -key /skyhub/storage/certs/ca.key -sha256 -batch -config /skyhub/storage/certs/openssl.cnf -days 1825 -out /skyhub/storage/certs/ca.cert
-    openssl genrsa -out /skyhub/storage/certs/service.key 4096
-    openssl req -new -key /skyhub/storage/certs/service.key -batch -config /skyhub/storage/certs/openssl.cnf -out /skyhub/storage/certs/service.csr 
-    openssl x509 -req -in /skyhub/storage/certs/service.csr -CA /skyhub/storage/certs/ca.cert -CAkey /skyhub/storage/certs/ca.key -CAcreateserial -out /skyhub/storage/certs/service.pem -days 1825 -sha256 -extfile /skyhub/storage/certs/openssl.cnf -extensions v3_ca
+    openssl req \
+      -newkey rsa:2048 \
+      -config /skyhub/storage/certs/openssl.cnf \
+      -x509 \
+      -new \
+      -nodes \
+      -keyout /skyhub/storage/certs/server.key \
+      -out /skyhub/storage/certs/server.crt  \
+      -sha256  \
+      -days 3650  \
+      -addext "extendedKeyUsage = serverAuth"  
+    #openssl genrsa -out /skyhub/storage/certs/ca.key 4096
+    #openssl req -new -x509 -key /skyhub/storage/certs/ca.key -sha256 -batch -config /skyhub/storage/certs/openssl.cnf -days 1825 -out /skyhub/storage/certs/ca.cert
+    #openssl genrsa -out /skyhub/storage/certs/service.key 4096
+    #openssl req -new -key /skyhub/storage/certs/service.key -batch -config /skyhub/storage/certs/openssl.cnf -out /skyhub/storage/certs/service.csr 
+    #openssl x509 -req -in /skyhub/storage/certs/service.csr -CA /skyhub/storage/certs/ca.cert -CAkey /skyhub/storage/certs/ca.key -CAcreateserial -out /skyhub/storage/certs/service.pem -days 1825 -sha256 -extfile /skyhub/storage/certs/openssl.cnf -extensions v3_ca
     exit 0
   args:
     executable: /bin/bash
