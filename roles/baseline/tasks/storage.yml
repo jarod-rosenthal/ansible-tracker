@@ -70,4 +70,4 @@
     src: LABEL=SKYHUB_STORAGE
     fstype: ext4
     state: mounted
-    opts: defaults,noauto
+    opts: defaults,nofail
