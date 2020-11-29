@@ -50,6 +50,15 @@ startSkyhub() {
             arm64v8/mariadb:10.1
     fi
 
+    echo "Starting wetty"
+    if [ ! "$(sudo docker ps | grep skyhub-wetty$)" ]; then
+        docker run -d --name wetty \
+            --restart unless-stopped \
+            --network skyhub-network \
+            -p 4000:4000 \
+            skyhuborg/wetty:{{ docker_tag }}
+    fi
+
     echo "Starting tracker-controller"
     if [ ! "$(sudo docker ps | grep skyhub-tracker-controller$)" ]; then
         sudo docker run -d \
