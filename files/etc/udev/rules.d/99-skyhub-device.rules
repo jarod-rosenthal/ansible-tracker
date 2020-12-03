@@ -16,3 +16,6 @@ ATTRS{idVendor}=="24f0", ATTRS{idProduct}=="204a", KERNEL=="ttyUSB*", SYMLINK+="
 
 # Cygnal Integrated Products, Inc. CP210x UART Bridge / myAVR mySmartUSB light (Ultimate GPS USB)
 ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", KERNEL=="ttyUSB*", SYMLINK+="skyhub-gps" MODE="0777"
+
+# Future Technology Devices International, Ltd FT232 USB-Serial (UART) IC
+ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6001", KERNEL=="ttyUSB*", SYMLINK+="skyhub-gps" MODE="0777"
