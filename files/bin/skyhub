@@ -82,6 +82,7 @@ startSkyhub() {
             --env dnn-model-path=/skyhub/models \
             --env JETSON_MODULE=${JETSON_MODULE} \
             --env "db-connect-string=skyhub:3fSS34f03lls@tcp(skyhub-mysql:3306)/skyhub?charset=utf8mb4&parseTime=True&loc=Local" \
+            --env GRPC_GO_RETRY=on \
             -v /skyhub/storage/data:/skyhub/data -v /skyhub/storage/etc:/skyhub/etc \
             -v /skyhub/skyhub.pipe:/tmp/skyhub.pipe -v /skyhub/storage/certs:/var/certs \
             --log-opt max-size=10m --log-opt max-file=5 \
