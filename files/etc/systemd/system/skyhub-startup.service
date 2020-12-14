@@ -3,7 +3,7 @@ Description=Sky Hub Startup
 After=multi-user.target
 
 [Service]
-ExecStart=/bin/sh /bin/skyhub-startup
+ExecStart=/bin/bash /bin/skyhub-startup
 
 [Install]
 WantedBy=multi-user.target
