@@ -162,6 +162,11 @@
     src: ./files/etc/profile.d/jetson-vars.sh
     dest: /etc/profile.d/jetson-vars.sh
 
+- name: Adding skyhub bash completion to /etc/bash_completion.d
+  copy:
+    src: ./files/etc/bash_completion.d/skyhub-completion.bash
+    dest: /etc/bash_completion.d/skyhub-completion.bash
+
 - name: Adding skyhub-jobs to cron weekly
   copy:
     mode: 0777
