@@ -11,10 +11,14 @@
 - name: Find GPS Device path
   shell: echo /dev/$(readlink /dev/skyhub-gps)
   register: gps_device
+  tags:
+      - gps
 
 - name: Create Sky Hub Network
   community.general.docker_network:
     name: skyhub-network
+  tags:
+      - gps
 
 - name: Setup GPSD container
   community.general.docker_container:
@@ -31,6 +35,8 @@
     log_options:
       max-size: 1m
       max-file: "1"
+  tags:
+      - gps
 
 # - name: Disable GPSD
 #   systemd:
@@ -50,6 +56,8 @@
     line: "{{ item }}"
   loop:
     - refclock SHM  0 delay 0.5 refid GPS
+  tags:
+      - gps
 
 # - name: Enable GPSD
 #   systemd:
