@@ -191,6 +191,7 @@ resetGPS() {
     git clone -q https://gitlab.com/skyhuborg/ansible-tracker.git /tmp/ansible-tracker
     cd /tmp/ansible-tracker
     sudo ansible-playbook dev.yml --tags gps
+    rm -rf /tmp/ansible-tracker
 }
 
 updateSkyHub() {
