@@ -180,7 +180,7 @@ viewGPS() {
     echo "GPS Device /dev/skyhub-gps"
     readlink /dev/skyhub-gps
     echo "GPSD docker arguments"
-    docker inspect --format='{{.Args}}' skyhub-gpsd
+    docker inspect --format='{{ '{{' }}.Args {{ '}}' }}' skyhub-gpsd
 }
 
 resetGPS() {
