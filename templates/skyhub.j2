@@ -21,8 +21,6 @@ showUsage() {
     #echo "      reset         - Resets the tracker config and removes the old database (does not delete videos)"
     echo "      resetdb       - Resets the mysql database"
     echo "      resetconfig   - Resets the track configuration (You will have to rerun the setup wizard)"
-    echo "      resetgps      - Resets the gpsd docker and device associated with it"
-    echo "      viewgps       - Displays gps configuration information"
     echo "      help          - Shows this help"
     echo " "
     echo " "
@@ -174,24 +172,6 @@ resetSkyHubConfig() {
     else
         echo "Okay good, glad I asked."
     fi
-}
-
-viewGPS() {
-    echo "GPS Device /dev/skyhub-gps"
-    readlink /dev/skyhub-gps
-    echo "GPSD docker arguments"
-    docker inspect --format='{{ '{{' }}.Args {{ '}}' }}' skyhub-gpsd
-}
-
-resetGPS() {
-    GITBRANCH={{ git_branch }}
-    TRACKERENV={{ tracker_env }}
-    DOCKERTAG={{ docker_tag }}
-
-    git clone -q https://gitlab.com/skyhuborg/ansible-tracker.git /tmp/ansible-tracker
-    cd /tmp/ansible-tracker
-    sudo ansible-playbook dev.yml --tags gps
-    rm -rf /tmp/ansible-tracker
 }
 
 updateSkyHub() {

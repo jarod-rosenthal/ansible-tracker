@@ -23,14 +23,14 @@
 - name: Setup GPSD container
   community.general.docker_container:
     name: skyhub-gpsd
-    image: skyhuborg/gpsd:latest
+    image: skyhuborg/gpsd:{{ docker_tag }}
     network_mode: skyhub-network
     state: started
     restart: no
     restart_policy: always
     privileged: yes
     ipc_mode: host
-    command: -D1 {{ gps_device.stdout }}
+    command: -D1 /dev/skyhub-gps
     log_driver: json-file
     log_options:
       max-size: 1m
