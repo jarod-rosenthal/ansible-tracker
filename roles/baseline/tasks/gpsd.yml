@@ -23,7 +23,7 @@
 - name: Setup GPSD container
   community.general.docker_container:
     name: skyhub-gpsd
-    image: skyhuborg/gpsd:latest
+    image: skyhuborg/gpsd:{{ docker_tag }}
     network_mode: skyhub-network
     state: started
     restart: no
