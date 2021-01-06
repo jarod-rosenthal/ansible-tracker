@@ -31,6 +31,8 @@
     privileged: yes
     ipc_mode: host
     command: -D1 /dev/skyhub-gps
+    volumes:
+      - /dev:/dev    
     log_driver: json-file
     log_options:
       max-size: 1m
