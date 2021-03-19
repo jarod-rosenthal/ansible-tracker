@@ -274,6 +274,7 @@
     - whoopsie
     - wpa_supplicant
     - chrony
+    - chronyd
 
 - name: Enable services
   systemd:
@@ -284,6 +285,7 @@
   become: true
   loop:
     - chrony
+    - chronyd
     - avahi-daemon
     - ssh
     - docker
