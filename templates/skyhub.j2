@@ -206,6 +206,9 @@ updateSkyHub() {
     echo "Updating tracker-ui"
     docker pull skyhuborg/tracker-ui:{{ docker_tag }}
 
+    echo "Updating gpsd"
+    docker pull skyhuborg/gpsd:{{ docker_tag }}
+
     startSkyhub
 
     docker system prune -f
