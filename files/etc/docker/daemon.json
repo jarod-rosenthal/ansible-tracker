@@ -5,6 +5,7 @@
             "runtimeArgs": []
         }
     },
-    "data-root": "/skyhub/storage/docker"
+    "data-root": "/skyhub/storage/docker",
+    "default-runtime": "nvidia"
 }
 
