@@ -121,6 +121,24 @@
 #  loop:
 #    - systemd-timesyncd
 
+- name: Ansible replace string example
+  replace:
+    path: /etc/apt/sources.list.d/nvidia-l4t-apt-source.list
+    regexp: 'r32.4'
+    replace: "r32.5"
+
+- name: Remove packages
+  apt:
+    name: deepstream-5.0
+    state: absent
+
+- name: Update apt-get repo and cache
+  apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
+
+- name: Upgrade all apt packages
+  apt: upgrade=dist force_apt_get=yes
+
+
 - name: Install packages
   apt:
     autoremove: yes
@@ -130,11 +148,11 @@
       - docker.io
       - avahi-daemon
       - git
-      - nvidia-container-csv-cuda=10.2.89-1
-      - nvidia-container-csv-cudnn=8.0.0.180-1+cuda10.2
-      - nvidia-container-csv-tensorrt=7.1.3.0-1+cuda10.2
-      - nvidia-container-csv-visionworks=1.6.0.501
-      - deepstream-5.0=5.0.1-1
+      - nvidia-container-csv-cuda
+      - nvidia-container-csv-cudnn
+      - nvidia-container-csv-tensorrt
+      - nvidia-container-csv-visionworks
+      - deepstream-5.1
       - gpsd-clients
       - chrony
       - htop
@@ -216,15 +234,6 @@
   loop:
     - ./files/etc/systemd/system/skyhub-pipe.service
     - ./files/etc/systemd/system/skyhub-startup.service
-    # - ./files/etc/systemd/system/skyhub-gpsd.service
-
-# - name: Installing socket service definitions
-#   copy:
-#     src: "{{ item }}"
-#     dest: /lib/systemd/system/
-#     mode: 644
-#   loop:
-#     - ./files/etc/systemd/socket/skyhub-gpsd.socket
 
 - name: Installing Sky Hub files
   copy:

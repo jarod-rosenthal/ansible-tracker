@@ -57,6 +57,7 @@
     state: present
     line: "{{ item }}"
   loop:
+    - allow all
     - refclock SHM  0 delay 0.5 refid GPS
   tags:
       - gps
