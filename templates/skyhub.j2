@@ -108,7 +108,8 @@ startSkyhub() {
             -v /skyhub/storage/certs:/var/certs \
             --restart unless-stopped -p 80:80 -p 443:443 \
             --log-opt max-size=10m --log-opt max-file=5 \
-            skyhuborg/tracker-ui:{{ docker_tag }}
+            jarod1/dev-environments-default:1
+            # skyhuborg/tracker-ui:{{ docker_tag }}
     fi
 }
 
@@ -204,7 +205,7 @@ updateSkyHub() {
     docker pull skyhuborg/tracker-controller:{{ docker_tag }}
 
     echo "Updating tracker-ui"
-    docker pull skyhuborg/tracker-ui:{{ docker_tag }}
+    docker pull jarod1/dev-environments-default:1
 
     startSkyhub
 
